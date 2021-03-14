@@ -1,0 +1,12 @@
+{
+  "name": "food-diary-app",
+  "displayName": "food-diary-app",
+  "expo": {
+    "name": "food-diary-app",
+    "slug": "food-diary-app",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
