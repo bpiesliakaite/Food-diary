@@ -1,24 +1,36 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, Image, TextInput, Button, TouchableOpacity, } from 'react-native';
-import { Container } from 'native-base';
 import { Link } from 'react-router-native';
 
-export default function HomePage() {
+
+export default function PasswordReminderForm() {
+    const [email, setEmail] = useState("");
+    
 
     return (
-        <Container style={styles.container}>
+        <View style={styles.container}>
             <Image style={styles.image} source={require("../assets/food_icon.png")} />
             <StatusBar style="auto" />
+            <View style={styles.inputView}>
+                <TextInput
+                    style={styles.TextInput}
+                    placeholder="Email"
+                    placeholderTextColor="#003f5c"
+                    onChangeText={(email) => setEmail(email)}
+                />
+            </View>
 
-            <TouchableOpacity >
-
-                <Link style={styles.loginBtn} to="/login">
-                    <Text style={styles.loginText}>LET'S BEGIN</Text>
+            <TouchableOpacity>
+                <Link style={styles.login_button} to="/login">
+                    <Text style={styles.login_button}>Go back to login page</Text>
                 </Link>
-                {/* <Text style={styles.loginText}>LET'S BEGIN</Text> */}
             </TouchableOpacity>
-        </Container>
+
+            <TouchableOpacity style={styles.createBtn}>
+                <Text style={styles.loginText}>SEND A PASSWORD REMINDER</Text>
+            </TouchableOpacity>
+        </View>
     );
 }
 
@@ -28,12 +40,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff",
         alignItems: "center",
         justifyContent: "center",
-        width: "100%",
-    },
-
-    loginText: {
-        color: "black",
-        fontWeight: "bold",
+        width: "100%"
     },
 
     image: {
@@ -55,16 +62,19 @@ const styles = StyleSheet.create({
     TextInput: {
         height: 50,
         flex: 1,
-        padding: 10,
-        marginLeft: 20,
+        padding: 0,
+        marginLeft: 0,
     },
 
-    forgot_button: {
+    login_button: {
         height: 30,
         marginBottom: 30,
+        color: "grey",
+        backgroundColor: "white",
+        borderRadius: 55,
     },
 
-    loginBtn: {
+    createBtn: {
         width: "80%",
         borderRadius: 25,
         height: 50,
@@ -72,6 +82,6 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         marginTop: 40,
         backgroundColor: "#FF1493",
-
     },
 });
+

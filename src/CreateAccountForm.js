@@ -1,39 +1,27 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, Image, TextInput, Button, TouchableOpacity, BackHandler, Alert } from 'react-native';
-import { View } from 'native-base';
-import { Link, useHistory } from 'react-router-native';
-import { useDispatch, useSelector } from 'react-redux';
-import { accountLogin } from './redux/store';
-
-BackHandler.addEventListener('hardwareBackPress', function () {
-  return true;
-})
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, Image, TextInput, Button, TouchableOpacity, } from 'react-native';
+import { Link } from 'react-router-native';
+import { useSelector, useDispatch } from 'react-redux';
+import { accountRegister } from './redux/store';
 
 
-export default function LoginForm() {
+export default function CreateAccountForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const account = useSelector(state => state.account.account);
+  const [repeatPassword, setRepeatPassword] = useState("");
+
+  const registered = useSelector(state => state.account.registered);
   const dispatch = useDispatch();
-  const history = useHistory();
-
-  useEffect(() => {
-    if (!!account) {
-      history.push('/dashboard');
-    }
-  }, [account]);
-
-
-
   const onSubmit = () => {
-    dispatch(accountLogin({ email, password }));
+    console.log('pressed');
+    dispatch(accountRegister({ email, password }))
   }
+  console.log(registered);
 
   return (
-
     <View style={styles.container}>
-
+      <Text>{registered}</Text>
       <Image style={styles.image} source={require("../assets/food_icon.png")} />
       <StatusBar style="auto" />
       <View style={styles.inputView}>
@@ -57,27 +45,31 @@ export default function LoginForm() {
         />
       </View>
 
+      <View style={styles.inputView}>
+        <TextInput
+          style={styles.TextInput}
+          placeholder="Repeat the password"
+          placeholderTextColor="#003f5c"
+          secureTextEntry={true}
+          value={repeatPassword}
+          onChangeText={(repeatPassword) => setRepeatPassword(repeatPassword)}
+        />
+      </View>
+
       <TouchableOpacity>
-        <Link style={styles.forgot_button} to="/remind-password">
-          <Text style={styles.forgot_button}>Forgot Password?</Text>
+        <Link style={styles.login_button} to="/login">
+          <Text style={styles.login_button}>I already have an account</Text>
         </Link>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={onSubmit}>
-        <Text style={styles.loginText}>LOGIN</Text>
-      </TouchableOpacity>
 
-      <TouchableOpacity>
-        <Link style={styles.create_button} to="/create-account">
-          <Text style={styles.create_button}>Don't have an account? Create one!</Text>
-        </Link>
-      </TouchableOpacity>
 
+      <TouchableOpacity style={styles.createBtn} onPress={onSubmit}>
+        <Text style={styles.loginText}>CREATE AN ACCOUNT</Text>
+      </TouchableOpacity>
     </View>
   );
 }
-
-
 
 const styles = StyleSheet.create({
   container: {
@@ -100,18 +92,17 @@ const styles = StyleSheet.create({
     width: "70%",
     height: 45,
     marginBottom: 20,
-
     alignItems: "center",
   },
 
   TextInput: {
     height: 50,
     flex: 1,
-    padding: 10,
+    padding: 0,
     marginLeft: 0,
   },
 
-  forgot_button: {
+  login_button: {
     height: 30,
     marginBottom: 30,
     color: "grey",
@@ -119,25 +110,15 @@ const styles = StyleSheet.create({
     borderRadius: 55,
   },
 
-  loginBtn: {
-    width: 300,
+  createBtn: {
+    width: "80%",
     borderRadius: 25,
     height: 50,
     alignItems: "center",
     justifyContent: "center",
     marginTop: 40,
     backgroundColor: "#FF1493",
-
   },
-
-  create_button: {
-    height: 30,
-    marginBottom: 30,
-    color: "grey",
-    backgroundColor: "white",
-    borderRadius: 55,
-  },
-
 });
 
 // export default class App extends React.Component {
@@ -171,4 +152,3 @@ const styles = StyleSheet.create({
 //     marginBottom: 40
 //   }
 // });
-
