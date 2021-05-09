@@ -25,6 +25,10 @@ const AppTabs = () => {
                 <Icon type="MaterialIcons" name="stacked-bar-chart" />
                 <Text>Reports</Text>
             </Button>
+            <Button vertical active={location.pathname === '/profile'} onPress={() => openRoute('/profile')}>
+                <Icon type="Ionicons" name="person" />
+                <Text>Profile</Text>
+            </Button>
         </FooterTab>
     </Footer>)
 }

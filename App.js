@@ -17,6 +17,8 @@ import PasswordReminderForm from './src/PasswordReminderForm';
 import Dashboard from './src/Dashboard';
 import Meals from './src/Meals';
 import Reports from './src/Reports';
+import Profile from './src/ProfileForm';
+import ChangePasswordForm from './src/ChangePasswordForm';
 
 export default function App() {
 
@@ -40,7 +42,7 @@ export default function App() {
         <BackButton>
           <Container>
             <Header />
-            <Content>
+            <View style={{ flex: 1 }}>
               <Route exact path="/" component={HomePage} />
               <Route exact path="/login" component={LoginForm} />
               <Route exact path="/create-account" component={CreateAccountForm} />
@@ -48,8 +50,10 @@ export default function App() {
               <Route exact path="/dashboard" component={Dashboard} />
               <Route exact path="/meals" component={Meals} />
               <Route exact path="/reports" component={Reports} />
+              <Route exact path="/profile" component={Profile} />
+              <Route exact path="/change-password" component={ChangePasswordForm} />
               <StatusBar style="auto" />
-            </Content>
+            </View>
             <Tabs />
           </Container>
         </BackButton>
@@ -64,7 +68,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
 
 

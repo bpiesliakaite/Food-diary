@@ -41,6 +41,7 @@ export default function Dashboard() {
             justifyContent: 'center',
             margin: 5,
         }}>
+            <Text>{item.content}</Text>
             <Button iconLeft>
                 <Icon type="Octicons" name="plus" />
                 <Text>Add item</Text>
@@ -50,9 +51,15 @@ export default function Dashboard() {
 
     return (
         <>
-            <Text>Welcome {account.email}</Text>
+            {/* <Text>Welcome {account.email}</Text> */}
             <Accordion dataArray={dataArray} expanded={[]} renderHeader={renderHeader} renderContent={renderContent} />
-            <Modal visible onRequestClose={() => { }}>
+            <Fab
+                direction="up"
+                containerStyle={{}}
+                style={{ backgroundColor: '#5067FF' }}
+                position="bottomRight"
+            ><Icon type="Octicons" name="plus" /></Fab>
+            <Modal visible={false} onRequestClose={() => { }}>
                 <Form>
                     <Item>
                         <Input placeholder="Username" />
