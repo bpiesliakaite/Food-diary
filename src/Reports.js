@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Container, Header, View, Fab, Button, Icon } from 'native-base';
+import { Container, Header, View, Fab, Button, Icon, Text } from 'native-base';
+import FoodEntryForm from './FoodEntryForm';
 export default class Reports extends Component {
     constructor(props) {
         super(props)
@@ -8,20 +9,6 @@ export default class Reports extends Component {
         };
     }
     render() {
-        return (
-            <Container>
-                <Header />
-                <View style={{ flex: 1 }}>
-                    <Fab
-                        active={this.state.active}
-                        direction="up"
-                        containerStyle={{}}
-                        style={{ backgroundColor: '#5067FF' }}
-                        position="bottomRight"
-                        onPress={() => this.setState({ active: !this.state.active })}>
-                    </Fab>
-                </View>
-            </Container>
-        );
+        return <FoodEntryForm />;
     }
 }

@@ -51,7 +51,7 @@ export default function Dashboard() {
 
     return (
         <>
-            {/* <Text>Welcome {account.email}</Text> */}
+            <Text>Welcome {account?.email}</Text>
             <Accordion dataArray={dataArray} expanded={[]} renderHeader={renderHeader} renderContent={renderContent} />
             <Fab
                 direction="up"
@@ -59,19 +59,6 @@ export default function Dashboard() {
                 style={{ backgroundColor: '#5067FF' }}
                 position="bottomRight"
             ><Icon type="Octicons" name="plus" /></Fab>
-            <Modal visible={false} onRequestClose={() => { }}>
-                <Form>
-                    <Item>
-                        <Input placeholder="Username" />
-                    </Item>
-                    <Item last>
-                        <Picker note mode="dropdown" style={{ width: 120, height: 40 }} selectedValue="key">
-                            <Picker.Item label="Test" value="key" />
-                            <Picker.Item label="Test2" value="key2" />
-                        </Picker>
-                    </Item>
-                </Form>
-            </Modal>
         </>
     );
 }

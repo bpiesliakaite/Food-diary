@@ -1,10 +1,30 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { StyleSheet, Text, View, Image, TextInput, Button, TouchableOpacity, } from 'react-native';
 import { Container } from 'native-base';
-import { Link } from 'react-router-native';
+import { Link, useHistory } from 'react-router-native';
+import { accountAuthorize } from './redux/store';
 
 export default function HomePage() {
+    const dispatch = useDispatch();
+
+    const isUserLoggedIn = useSelector(state => !!state.account.account);
+
+    const history = useHistory();
+
+    useEffect(() => {
+        dispatch(accountAuthorize());
+    }, [dispatch])
+
+    const onBeginClick = () => {
+        if (isUserLoggedIn) {
+            history.push('/dashboard');
+        } else {
+            history.push('/login');
+        }
+    }
+
 
     return (
         <Container style={styles.container}>
@@ -13,9 +33,7 @@ export default function HomePage() {
 
             <TouchableOpacity >
 
-                <Link style={styles.loginBtn} to="/login">
-                    <Text style={styles.loginText}>LET'S BEGIN</Text>
-                </Link>
+                <Button style={styles.loginBtn} onPress={onBeginClick} title="LET'S BEGIN" />
                 {/* <Text style={styles.loginText}>LET'S BEGIN</Text> */}
             </TouchableOpacity>
         </Container>

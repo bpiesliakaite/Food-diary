@@ -1,5 +1,5 @@
 import { configureStore, createSlice, createAsyncThunk, combineReducers } from '@reduxjs/toolkit';
-import { AsyncStorage } from 'react-native';
+import * as SecureStore from 'expo-secure-store';
 import axios from 'axios';
 import cookieParser from 'set-cookie-parser';
 
@@ -19,16 +19,40 @@ export const accountRegister = createAsyncThunk(
 
 export const accountLogin = createAsyncThunk(
     'accountLogin',
-    async (userData) => {
+    async (userData, { dispatch }) => {
         try {
             const response = await axios.post('http://192.168.43.233:5000/auth/login', userData);
-            await AsyncStorage.setItem('accessToken', cookieParser.parse(response)[0].value);
-            const response2 = await axios.get('http://192.168.43.233:5000/user/self', {
+            await SecureStore.setItemAsync('accessToken', cookieParser.parse(response)[0].value);
+            dispatch(accountAuthorize());
+        } catch (error) {
+            console.log(error);
+        }
+    }
+)
+
+export const accountAuthorize = createAsyncThunk(
+    'accountAuthorize',
+    async () => {
+        try {
+            const accessToken = await SecureStore.getItemAsync('accessToken');
+            const response = await axios.get('http://192.168.43.233:5000/user/self', {
                 headers: {
-                    Cookie: `accessToken=${cookieParser.parse(response)[0].value}`,
+                    Cookie: `accessToken=${accessToken}`,
                 }
-            })
-            return response2.data;
+            });
+            return response.data;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+)
+
+export const accountLogout = createAsyncThunk(
+    'accountLogout',
+    async () => {
+        try {
+            await SecureStore.deleteItemAsync('accessToken');
+            return null;
         } catch (error) {
             console.log(error);
         }
@@ -49,8 +73,11 @@ const accountSlice = createSlice({
         [accountRegister.fulfilled]: (state, action) => {
             state.registered = true;
         },
-        [accountLogin.fulfilled]: (state, action) => {
+        [accountAuthorize.fulfilled]: (state, action) => {
             state.account = action.payload;
+        },
+        [accountLogout.pending]: (state, action) => {
+            state.account = undefined;
         }
     }
 })

@@ -6,11 +6,18 @@ const AppTabs = () => {
     const history = useHistory();
     const location = useLocation();
 
+    const appearsOn = ['/dashboard', '/meals', '/reports', '/profile'];
+
     const openRoute = (route) => {
         if (route !== location.pathname) {
             history.push(route);
         }
     }
+
+    if (!appearsOn.includes(location.pathname)) {
+        return null;
+    }
+
     return (<Footer>
         <FooterTab>
             <Button vertical active={location.pathname === '/dashboard'} onPress={() => openRoute('/dashboard')}>
