@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react';
 import { Modal } from 'react-native';
 import { Accordion, View, Text, Icon, Fab, Button, Row, Form, Item, Picker, Input } from 'native-base';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { openFoodEntryForm } from './redux/store';
+import FoodEntryForm from './FoodEntryForm';
 
 const dataArray = [
     { title: 'Breakfast', content: 'this is very breakfast' },
@@ -49,6 +51,12 @@ export default function Dashboard() {
         </View>
     )
 
+    const dispatch = useDispatch();
+
+    const onFoodEntryCreateClick = () => {
+        dispatch(openFoodEntryForm(true));
+    }
+
     return (
         <>
             <Text>Welcome {account?.email}</Text>
@@ -58,7 +66,8 @@ export default function Dashboard() {
                 containerStyle={{}}
                 style={{ backgroundColor: '#5067FF' }}
                 position="bottomRight"
-            ><Icon type="Octicons" name="plus" /></Fab>
+            ><Icon type="Octicons" name="plus" onPress={onFoodEntryCreateClick} /></Fab>
+            <FoodEntryForm />
         </>
     );
 }

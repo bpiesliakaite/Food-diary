@@ -9,6 +9,6 @@ export default class Reports extends Component {
         };
     }
     render() {
-        return <FoodEntryForm />;
+        return <Text>This is reports</Text>
     }
 }
