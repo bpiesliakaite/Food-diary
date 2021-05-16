@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Item, Icon, Picker, Form, Label, Input, Button, Text, View } from 'native-base';
 import { useDispatch, useSelector } from 'react-redux';
 import { Modal } from 'react-native';
-import { loadMealSelectOptions, openFoodEntryForm } from './redux/store';
+import { loadMealSelectOptions, openFoodEntryForm, MealTypeEnum, addFoodItem } from './redux/store';
 
 
 const FoodGroupEnum = Object.freeze({
@@ -15,19 +15,14 @@ const FoodGroupEnum = Object.freeze({
     SweetsSugarsBeverages: 'Sweets, sugars, beverages',
     Alcohol: 'Alcohol',
     Fat: 'Fat',
-})
-
-const MealTypeEnum = Object.freeze({
-    Breakfast: 'Breakfast',
-    Lunch: 'Lunch',
-    Dinner: 'Dinner',
-    Snacks: 'Snacks'
-})
+});
 
 const FoodEntryForm = () => {
     const [foodGroup, setFoodGroup] = useState();
     const [food, setFood] = useState();
     const [mealType, setMealType] = useState();
+    const [amount, setAmount] = useState('');
+    const [errors, setErrors] = useState({});
     const foodOptions = useSelector(state => state.meals.mealSelectOptions);
     const dispatch = useDispatch();
     const isOpen = useSelector(state => state.meals.isFoodEntryModalOpen);
@@ -47,6 +42,32 @@ const FoodEntryForm = () => {
 
     const onFormDismiss = () => {
         dispatch(openFoodEntryForm(false));
+    }
+
+    useEffect(() => {
+        if (!isOpen) {
+            setErrors({});
+        }
+    }, [isOpen]);
+
+    const onSubmit = () => {
+        const amountNumber = parseFloat(amount);
+        const errors = {}
+        let hasErrors = false;
+        if (!amountNumber) {
+            errors.amount = 'Required';
+            hasErrors = true;
+        }
+
+        if (hasErrors) {
+            setErrors(errors);
+        } else {
+            dispatch(addFoodItem({
+                mealType,
+                food,
+                amount: amountNumber,
+            }))
+        }
     }
 
     const options = Object.values(FoodGroupEnum).map(value =>
@@ -82,7 +103,7 @@ const FoodEntryForm = () => {
                     shadowRadius: 3.84,
                     elevation: 5,
                 }}>
-                    <Label style={{ color: 'blue', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Food Group</Label>
+                    <Label style={{ color: 'blue', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Meal Type</Label>
                     <Item >
                         <Picker
                             mode="dropdown"
@@ -109,7 +130,7 @@ const FoodEntryForm = () => {
                         </Picker>
                     </Item>
                     <Label style={{ color: 'blue', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Food</Label>
-                    <Item >
+                    <Item>
                         <Picker
                             mode="dropdown"
                             iosHeader="Select Meal"
@@ -122,11 +143,12 @@ const FoodEntryForm = () => {
                         </Picker>
                     </Item>
                     <Label style={{ color: 'blue', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Amount ({foodGroup === FoodGroupEnum.Alcohol ? 'ml' : 'mg'})</Label>
-                    <Item>
-                        <Input placeholder="Enter Amount" />
+                    <Item error={!!errors.amount}>
+                        <Input keyboardType="numeric" value={amount} onChangeText={(text) => setAmount(text)} placeholder="Enter Amount" />
                     </Item>
+                    {errors.amount ? <Text style={{ marginLeft: 15, color: 'red', fontSize: 9 }}>{errors.amount}</Text> : null}
                     <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 30 }}>
-                        <Button><Text>Add Item</Text></Button>
+                        <Button onPress={onSubmit}><Text>Add Item</Text></Button>
                         <Button onPress={onFormDismiss}><Text>Cancel</Text></Button>
                     </View>
                 </Form>

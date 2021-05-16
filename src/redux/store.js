@@ -86,6 +86,14 @@ export const { authAccount } = accountSlice.actions;
 
 
 // Meals
+
+export const MealTypeEnum = Object.freeze({
+    Breakfast: 'Breakfast',
+    Lunch: 'Lunch',
+    Dinner: 'Dinner',
+    Snacks: 'Snacks'
+});
+
 export const loadMealSelectOptions = createAsyncThunk(
     'mealsLoadMealSelectOptions',
     async (group) => {
@@ -106,11 +114,52 @@ export const loadMealSelectOptions = createAsyncThunk(
     }
 );
 
+export const getFoodList = createAsyncThunk(
+    'mealsGetFoodList',
+    async () => {
+        try {
+            const accessToken = await SecureStore.getItemAsync('accessToken');
+            const response = await axios.get('http://192.168.43.233:5000/food/foodEntries', {
+                headers: {
+                    Cookie: `accessToken=${accessToken}`,
+                }
+            });
+            return response.data.userFood.reduce((foodObject, food) => ({
+                ...foodObject,
+                [food.mealType]: [...(foodObject[food.mealType] || []), food],
+            }), {});
+        } catch (error) {
+            console.log(error);
+        }
+    }
+);
+
+export const addFoodItem = createAsyncThunk(
+    'mealsAddFoodItem',
+    async (newFoodItem) => {
+        try {
+            const accessToken = await SecureStore.getItemAsync('accessToken');
+            const response = await axios.post('http://192.168.43.233:5000/food/createFoodEntry', newFoodItem, {
+                headers: {
+                    Cookie: `accessToken=${accessToken}`,
+                }
+            });
+            if (response.status !== 201) {
+                throw Error('creation failed');
+            }
+            return response.data;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+)
+
 const mealsSlice = createSlice({
     name: 'meals',
     initialState: {
         mealSelectOptions: [],
         isFoodEntryModalOpen: false,
+        foodList: {},
     },
     reducers: {
         openFoodEntryForm: (state, action) => {
@@ -124,6 +173,13 @@ const mealsSlice = createSlice({
         [loadMealSelectOptions.fulfilled]: (state, action) => {
             state.mealSelectOptions = action.payload;
         },
+        [getFoodList.fulfilled]: (state, action) => {
+            state.foodList = action.payload;
+        },
+        [addFoodItem.fulfilled]: (state, action) => {
+            state.isFoodEntryModalOpen = false;
+            state.foodList[action.payload.mealType] = [...(state.foodList[action.payload.mealType] || []), action.payload];
+        }
     }
 })
 

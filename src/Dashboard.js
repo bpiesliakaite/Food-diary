@@ -1,20 +1,47 @@
 import React, { useEffect } from 'react';
 import { Modal } from 'react-native';
-import { Accordion, View, Text, Icon, Fab, Button, Row, Form, Item, Picker, Input } from 'native-base';
+import { Accordion, View, Text, Icon, Fab, Button, ListItem, Left, Body, Right, List } from 'native-base';
 import { useDispatch, useSelector } from 'react-redux';
-import { openFoodEntryForm } from './redux/store';
+import { getFoodList, openFoodEntryForm, MealTypeEnum } from './redux/store';
 import FoodEntryForm from './FoodEntryForm';
 
-const dataArray = [
-    { title: 'Breakfast', content: 'this is very breakfast' },
-    { title: 'Lunch', content: 'this is lunch' },
-    { title: 'Dinner', content: 'this is dinner' },
-    { title: 'Snacks', content: 'this is snacks' },
-];
+
+const FoodGroupIcons = Object.freeze({
+    'Alcohol': (
+        <Button style={{ backgroundColor: 'pink' }}>
+            <Icon active type="MaterialCommunityIcons" name="bottle-wine" />
+        </Button>
+    )
+})
+
 
 export default function Dashboard() {
 
-    const account = useSelector(state => state.account.account);
+    useEffect(() => {
+        dispatch(getFoodList());
+    }, []);
+    const foodList = useSelector(state => state.meals.foodList);
+    const renderList = (mealType) => (
+        foodList[mealType] ? foodList[mealType].map((value, index) => (
+            <ListItem icon key={index}>
+                <Left>
+                    {FoodGroupIcons[value.group] || <Button style={{ backgroundColor: "#FF9501" }}>
+                        <Icon active name="airplane" />
+                    </Button>}
+                </Left>
+                <Body><Text>{value.food}</Text></Body>
+                <Right>
+                    <Text>{value.amount}{value.group === 'Alcohol' ? ' ml' : ' g'}</Text>
+                </Right>
+            </ListItem>
+        )) : null);
+
+    const dataArray = [
+        { title: MealTypeEnum.Breakfast, content: renderList(MealTypeEnum.Breakfast) },
+        { title: MealTypeEnum.Lunch, content: renderList(MealTypeEnum.Lunch) },
+        { title: MealTypeEnum.Dinner, content: renderList(MealTypeEnum.Dinner) },
+        { title: MealTypeEnum.Snacks, content: renderList(MealTypeEnum.Snacks) },
+    ];
 
     const renderHeader = (item, expanded) => {
         return (
@@ -38,16 +65,8 @@ export default function Dashboard() {
     }
 
     const renderContent = (item) => (
-        <View style={{
-            flexDirection: "row",
-            justifyContent: 'center',
-            margin: 5,
-        }}>
-            <Text>{item.content}</Text>
-            <Button iconLeft>
-                <Icon type="Octicons" name="plus" />
-                <Text>Add item</Text>
-            </Button>
+        <View style={{ margin: 5 }}>
+            {item.content}
         </View>
     )
 
@@ -59,7 +78,6 @@ export default function Dashboard() {
 
     return (
         <>
-            <Text>Welcome {account?.email}</Text>
             <Accordion dataArray={dataArray} expanded={[]} renderHeader={renderHeader} renderContent={renderContent} />
             <Fab
                 direction="up"
