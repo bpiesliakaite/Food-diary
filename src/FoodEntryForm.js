@@ -117,7 +117,7 @@ const FoodEntryForm = () => {
                         </Picker>
                     </Item>
                     <Label style={{ color: 'blue', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Food Group</Label>
-                    <Item >
+                    <Item>
                         <Picker
                             mode="dropdown"
                             iosHeader="Select Food Group"

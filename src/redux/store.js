@@ -114,6 +114,23 @@ export const loadMealSelectOptions = createAsyncThunk(
     }
 );
 
+export const getMeals = createAsyncThunk(
+    'getMeals',
+    async () => {
+        try {
+            const accessToken = await SecureStore.getItemAsync('accessToken');
+            const response = await axios.get('http://192.168.43.233:5000/food/meals', {
+                headers: {
+                    Cookie: `accessToken=${accessToken}`,
+                }
+            });
+            return response.data.meals;
+        } catch (exception) {
+            console.log(exception);
+        }
+    }
+);
+
 export const getFoodList = createAsyncThunk(
     'mealsGetFoodList',
     async () => {
@@ -160,6 +177,7 @@ const mealsSlice = createSlice({
         mealSelectOptions: [],
         isFoodEntryModalOpen: false,
         foodList: {},
+        meals: [],
     },
     reducers: {
         openFoodEntryForm: (state, action) => {
@@ -175,6 +193,9 @@ const mealsSlice = createSlice({
         },
         [getFoodList.fulfilled]: (state, action) => {
             state.foodList = action.payload;
+        },
+        [getMeals.fulfilled]: (state, action) => {
+            state.meals = action.payload;
         },
         [addFoodItem.fulfilled]: (state, action) => {
             state.isFoodEntryModalOpen = false;

@@ -1,14 +1,23 @@
-import React, { Component, useState } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import { Container, Label, Item, Input, View, Text, Icon, Fab, Left, Body, Right, Subtitle, Title, Button } from 'native-base';
 import { TouchableHighlight } from 'react-native';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import Tooltip from 'react-native-walkthrough-tooltip';
+import { useDispatch, useSelector } from 'react-redux';
+import { getFoodList, getMeals } from './redux/store';
+import { useHistory } from 'react-router';
 
 export default function Meals() {
 
-    const [list, setList] = useState(Array(7)
-        .fill("")
-        .map((_, i) => ({ key: `${i}`, text: `This Is #${i} Meal Title` })));
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(getMeals());
+    }, []);
+
+    const history = useHistory();
+
+    const meals = useSelector(state => state.meals.meals);
 
     const [isInfoTooltipVisible, setInfoTootlipVisible] = useState(false);
     return (
@@ -29,11 +38,11 @@ export default function Meals() {
             </View>
             <SwipeListView
                 style={{ padding: 40 }}
-                data={list}
+                data={meals}
                 renderItem={(data, rowMap) => (
                     <View style={{ backgroundColor: 'white', paddingBottom: 30, borderColor: 'blue', borderBottomWidth: 0, borderTopWidth: 1 }}>
-                        <Text style={{ fontWeight: 'bold', textAlign: 'center' }}>{data.item.text}</Text>
-                        <Text style={{ color: 'grey' }}>This is very detailed and long favourite meal description to test if this texts fits alright in the app</Text>
+                        <Text style={{ fontWeight: 'bold', textAlign: 'center' }}>{data.item.name}</Text>
+                        <Text style={{ color: 'grey' }}>{data.item.info}</Text>
                     </View>
                 )}
                 renderHiddenItem={(data, rowMap) => (
@@ -52,6 +61,7 @@ export default function Meals() {
                 containerStyle={{}}
                 style={{ backgroundColor: '#5067FF' }}
                 position="bottomRight"
+                onPress={() => history.push('/meals/create')}
             ><Icon type="Octicons" name="plus" /></Fab>
         </Container>
     );

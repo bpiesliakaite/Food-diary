@@ -20,6 +20,7 @@ import Meals from './src/Meals';
 import Reports from './src/Reports';
 import Profile from './src/ProfileForm';
 import ChangePasswordForm from './src/ChangePasswordForm';
+import MealForm from './src/MealForm';
 
 
 const AppHeader = () => {
@@ -72,6 +73,7 @@ export default function App() {
               <Route exact path="/remind-password" component={PasswordReminderForm} />
               <AuthorizedRoute exact path="/dashboard" component={Dashboard} />
               <AuthorizedRoute exact path="/meals" component={Meals} />
+              <AuthorizedRoute exact path="/meals/create" component={MealForm} />
               <AuthorizedRoute exact path="/reports" component={Reports} />
               <AuthorizedRoute exact path="/profile" component={Profile} />
               <AuthorizedRoute exact path="/change-password" component={ChangePasswordForm} />
