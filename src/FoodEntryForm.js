@@ -14,7 +14,6 @@ const FoodGroupEnum = Object.freeze({
     Dairy: 'Dairy',
     SweetsSugarsBeverages: 'Sweets, sugars, beverages',
     Alcohol: 'Alcohol',
-    Fat: 'Fat',
 });
 
 const FoodEntryForm = () => {
@@ -142,7 +141,7 @@ const FoodEntryForm = () => {
                             {foodOptionItems}
                         </Picker>
                     </Item>
-                    <Label style={{ color: 'blue', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Amount ({foodGroup === FoodGroupEnum.Alcohol ? 'ml' : 'mg'})</Label>
+                    <Label style={{ color: 'blue', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Amount ({foodGroup === FoodGroupEnum.Alcohol ? 'ml' : 'g'})</Label>
                     <Item error={!!errors.amount}>
                         <Input keyboardType="numeric" value={amount} onChangeText={(text) => setAmount(text)} placeholder="Enter Amount" />
                     </Item>

@@ -8,8 +8,43 @@ import FoodEntryForm from './FoodEntryForm';
 
 const FoodGroupIcons = Object.freeze({
     'Alcohol': (
-        <Button style={{ backgroundColor: 'pink' }}>
-            <Icon active type="MaterialCommunityIcons" name="bottle-wine" />
+        <Button style={{ backgroundColor: '#9BF6FF', borderRadius: 25 }}>
+            <Icon active type="MaterialCommunityIcons" name="bottle-wine" style={{ color: 'black' }} />
+        </Button>
+    ),
+    'Vegetables': (
+        <Button style={{ backgroundColor: '#CAFFBF', borderRadius: 25 }}>
+            <Icon active type="MaterialCommunityIcons" name="carrot" style={{ color: 'black' }} />
+        </Button>
+    ),
+    'Nuts': (
+        <Button style={{ backgroundColor: '#FFFDD0', borderRadius: 25 }}>
+            <Icon active type="MaterialCommunityIcons" name="peanut-outline" style={{ color: 'black' }} />
+        </Button>
+    ),
+    'Fish, meat, eggs': (
+        <Button style={{ backgroundColor: '#FFADAD', borderRadius: 25 }}>
+            <Icon active type="MaterialCommunityIcons" name="fish" style={{ color: 'black' }} />
+        </Button>
+    ),
+    'Fruits': (
+        <Button style={{ backgroundColor: '#FFD6A5', borderRadius: 25 }}>
+            <Icon active type="MaterialCommunityIcons" name="fruit-pineapple" style={{ color: 'black' }} />
+        </Button>
+    ),
+    'Grains': (
+        <Button style={{ backgroundColor: '#BDB2FF', borderRadius: 25 }}>
+            <Icon active type="MaterialCommunityIcons" name="seed-outline" style={{ color: 'black' }} />
+        </Button>
+    ),
+    'Dairy': (
+        <Button style={{ backgroundColor: '#FDFFB6', borderRadius: 25 }}>
+            <Icon active type="MaterialCommunityIcons" name="cheese" style={{ color: 'black' }} />
+        </Button>
+    ),
+    'Sweets, sugars, beverages': (
+        <Button style={{ backgroundColor: '#FFC6FF', borderRadius: 25 }}>
+            <Icon active type="MaterialCommunityIcons" name="candycane" style={{ color: 'black' }} />
         </Button>
     )
 })
