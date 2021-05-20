@@ -171,6 +171,26 @@ export const addFoodItem = createAsyncThunk(
     }
 )
 
+export const addMeal = createAsyncThunk(
+    'mealsAddMeal',
+    async (newMeal) => {
+        try {
+            const accessToken = await SecureStore.getItemAsync('accessToken');
+            const response = await axios.post('http://192.168.43.233:5000/food/meals', newMeal, {
+                headers: {
+                    Cookie: `accessToken=${accessToken}`,
+                }
+            });
+            if (response.status !== 201) {
+                throw Error('creation failed');
+            }
+            return response.data;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+)
+
 const mealsSlice = createSlice({
     name: 'meals',
     initialState: {
@@ -200,6 +220,9 @@ const mealsSlice = createSlice({
         [addFoodItem.fulfilled]: (state, action) => {
             state.isFoodEntryModalOpen = false;
             state.foodList[action.payload.mealType] = [...(state.foodList[action.payload.mealType] || []), action.payload];
+        },
+        [addMeal.fulfilled]: (state, action) => {
+            state.meals = [...state.meals, action.payload];
         }
     }
 })

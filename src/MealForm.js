@@ -2,32 +2,34 @@ import React, { useState, useEffect, Component } from 'react';
 import { Item, Icon, Picker, Form, Label, Input, Button, Text, View, DatePicker, Left, Textarea, Accordion } from 'native-base';
 import { Modal, Platform } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { Link } from 'react-router-native';
+import { Link, useHistory } from 'react-router-native';
 import { List } from 'native-base';
 import { ListItem } from 'native-base';
 import { Body } from 'native-base';
 import { Right } from 'native-base';
 import { useDispatch, useSelector } from 'react-redux';
-import { loadMealSelectOptions, MealTypeEnum } from './redux/store';
+import { addMeal, loadMealSelectOptions, MealTypeEnum } from './redux/store';
 
+
+const FoodGroupEnum = Object.freeze({
+    Vegetables: 'Vegetables',
+    Nuts: 'Nuts',
+    FishMeatEggs: 'Fish, meat, eggs',
+    Fruits: 'Fruits',
+    Grains: 'Grains',
+    Dairy: 'Dairy',
+    SweetsSugarsBeverages: 'Sweets, sugars, beverages',
+    Alcohol: 'Alcohol',
+    Fat: 'Fat',
+});
 
 const MealForm = () => {
+    const history = useHistory();
     const dispatch = useDispatch();
-
-    const FoodGroupEnum = Object.freeze({
-        Vegetables: 'Vegetables',
-        Nuts: 'Nuts',
-        FishMeatEggs: 'Fish, meat, eggs',
-        Fruits: 'Fruits',
-        Grains: 'Grains',
-        Dairy: 'Dairy',
-        SweetsSugarsBeverages: 'Sweets, sugars, beverages',
-        Alcohol: 'Alcohol',
-        Fat: 'Fat',
-    });
-
     const foodOptions = useSelector(state => state.meals.mealSelectOptions);
     const [errors, setErrors] = useState({});
+    const [foodItemForm, setFoodItemForm] = useState({});
+    const [foodItemEditKey, setFootItemEditKey] = useState('');
 
 
     const onFoodGroupChange = (newValue) => {
@@ -35,56 +37,68 @@ const MealForm = () => {
         dispatch(loadMealSelectOptions(newValue));
     }
 
-    const emptyFoodItemForm = {
-        mealType: '',
-        foodGroup: '',
-        foodOption: '',
-        foodOptionLabel: '',
-        amount: '',
-    };
+    useEffect(() => {
+        dispatch(loadMealSelectOptions(FoodGroupEnum.Vegetables));
+    }, []);
+
+    useEffect(() => {
+        if (foodOptions.length) {
+            setFoodItemForm((prevState) => ({
+                ...prevState,
+                foodOption: foodOptions[0].id,
+                foodOptionLabel: foodOptions[0].food,
+            }));
+        }
+
+    }, [foodOptions])
 
     const [mealFormState, setMealFormState] = useState({
         name: '',
         info: '',
-        foodItems: [
-            {
-                mealType: {
-                    key: 'Breakfast',
-                    value: 'Breakfast'
-                },
-                foodGroup: {
-                    key: 'Vegetables',
-                    value: 'Vegetables'
-                },
-                foodOption: '39',
-                foodOptionLabel: 'M&Ms',
-                amount: 100
-            }
-        ]
+        foodItems: []
     });
 
-    const [foodItemForm, setFoodItemForm] = useState(emptyFoodItemForm);
 
     const [isModalOpen, setModal] = useState(false);
 
     const addFoodItem = () => {
-        setFoodItemForm(emptyFoodItemForm);
+        setModal(true);
+    }
+
+    const editFoodItem = (key, foodItem) => {
+        console.log(key, foodItem);
+        setFootItemEditKey(key);
+        setFoodItemForm(foodItem);
         setModal(true);
     }
 
     const closeModalForm = () => {
         setModal(false);
-        setFoodItemForm(emptyFoodItemForm);
+        setFoodItemForm((prevState) => ({
+            ...prevState,
+            foodOption: foodOptions[0].id,
+            foodOptionLabel: foodOptions[0].food,
+            amount: ''
+        }));
     }
 
     const submitFoodItem = () => {
-        setMealFormState({
-            ...mealFormState,
-            foodItems: [
-                ...mealFormState.foodItems,
-                foodItemForm
-            ]
-        });
+        if (foodItemEditKey !== '') {
+            setMealFormState({
+                ...mealFormState,
+                foodItems:
+                    mealFormState.foodItems.map((value, index) => index === foodItemEditKey ? foodItemForm : value),
+            });
+        } else {
+            setMealFormState({
+                ...mealFormState,
+                foodItems: [
+                    ...mealFormState.foodItems,
+                    foodItemForm
+                ]
+            });
+        }
+        setFootItemEditKey('');
         closeModalForm();
     }
 
@@ -105,6 +119,14 @@ const MealForm = () => {
 
     const foodOptionItems = foodOptions.map(value => <Picker.Item label={value.food} value={value.id} key={value.id} />)
     const foodOptionsDictionary = foodOptions.reduce((foodMap, value) => ({ ...foodMap, [value.id]: value }), {});
+
+    const onSubmit = () => {
+        dispatch(addMeal({
+            ...mealFormState,
+            amount: parseInt(mealFormState.amount),
+        }));
+        history.push('/meals');
+    }
 
     return (
         <Form style={{ padding: 30 }}>
@@ -202,7 +224,7 @@ const MealForm = () => {
 
             <List>
                 <Label style={{ color: 'blue', fontSize: 13 }}>Consists of</Label>
-
+                {!mealFormState.foodItems.length && <Text>No items yet</Text>}
                 {mealFormState.foodItems.map((foodItem, indx) => {
                     return (<ListItem icon key={indx}>
 
@@ -213,7 +235,7 @@ const MealForm = () => {
                             <Button transparent onPress={() => removeFoodItem(indx)}>
                                 <Text style={{ color: 'red' }}>Remove</Text>
                             </Button>
-                            <Button transparent>
+                            <Button transparent onPress={() => editFoodItem(indx, foodItem)}>
                                 <Text style={{ color: 'blue' }}>Edit</Text>
                             </Button>
                         </Right>
@@ -221,10 +243,13 @@ const MealForm = () => {
                 })}
 
             </List>
-            <Button>
-                <Text onPress={() => addFoodItem()}>
+            <Button onPress={() => addFoodItem()}>
+                <Text>
                     Add Item
                 </Text>
+            </Button>
+            <Button onPress={() => onSubmit()}>
+                <Text>Save</Text>
             </Button>
         </Form>
     )

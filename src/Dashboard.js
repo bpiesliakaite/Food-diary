@@ -119,7 +119,8 @@ export default function Dashboard() {
                 containerStyle={{}}
                 style={{ backgroundColor: '#5067FF' }}
                 position="bottomRight"
-            ><Icon type="Octicons" name="plus" onPress={onFoodEntryCreateClick} /></Fab>
+                onPress={onFoodEntryCreateClick}
+            ><Icon type="Octicons" name="plus" /></Fab>
             <FoodEntryForm />
         </>
     );
