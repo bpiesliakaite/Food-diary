@@ -74,6 +74,7 @@ export default function App() {
               <AuthorizedRoute exact path="/dashboard" component={Dashboard} />
               <AuthorizedRoute exact path="/meals" component={Meals} />
               <AuthorizedRoute exact path="/meals/create" component={MealForm} />
+              <AuthorizedRoute exact path="/meals/edit" component={MealForm} />
               <AuthorizedRoute exact path="/reports" component={Reports} />
               <AuthorizedRoute exact path="/profile" component={Profile} />
               <AuthorizedRoute exact path="/change-password" component={ChangePasswordForm} />

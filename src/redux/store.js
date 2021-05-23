@@ -3,12 +3,14 @@ import * as SecureStore from 'expo-secure-store';
 import axios from 'axios';
 import cookieParser from 'set-cookie-parser';
 
+const baseUrl = 'http://192.168.42.85:5000';
+
 // Account
 export const accountRegister = createAsyncThunk(
     'accountRegister',
     async (userData, { dispatch }) => {
         try {
-            const response = await axios.post('http://192.168.43.233:5000/auth/register', userData);
+            const response = await axios.post(`${baseUrl}/auth/register`, userData);
             console.log(response);
         } catch (error) {
             console.log(error);
@@ -21,7 +23,7 @@ export const accountLogin = createAsyncThunk(
     'accountLogin',
     async (userData, { dispatch }) => {
         try {
-            const response = await axios.post('http://192.168.43.233:5000/auth/login', userData);
+            const response = await axios.post(`${baseUrl}/auth/login`, userData);
             await SecureStore.setItemAsync('accessToken', cookieParser.parse(response)[0].value);
             dispatch(accountAuthorize());
         } catch (error) {
@@ -35,7 +37,7 @@ export const accountAuthorize = createAsyncThunk(
     async () => {
         try {
             const accessToken = await SecureStore.getItemAsync('accessToken');
-            const response = await axios.get('http://192.168.43.233:5000/user/self', {
+            const response = await axios.get(`${baseUrl}/user/self`, {
                 headers: {
                     Cookie: `accessToken=${accessToken}`,
                 }
@@ -99,7 +101,7 @@ export const loadMealSelectOptions = createAsyncThunk(
     async (group) => {
         try {
             const accessToken = await SecureStore.getItemAsync('accessToken');
-            const response = await axios.get('http://192.168.43.233:5000/food/foodByGroup', {
+            const response = await axios.get(`${baseUrl}/food/foodByGroup`, {
                 params: {
                     group
                 },
@@ -119,7 +121,7 @@ export const getMeals = createAsyncThunk(
     async () => {
         try {
             const accessToken = await SecureStore.getItemAsync('accessToken');
-            const response = await axios.get('http://192.168.43.233:5000/food/meals', {
+            const response = await axios.get(`${baseUrl}/food/meals`, {
                 headers: {
                     Cookie: `accessToken=${accessToken}`,
                 }
@@ -136,7 +138,7 @@ export const getFoodList = createAsyncThunk(
     async () => {
         try {
             const accessToken = await SecureStore.getItemAsync('accessToken');
-            const response = await axios.get('http://192.168.43.233:5000/food/foodEntries', {
+            const response = await axios.get(`${baseUrl}/food/foodEntries`, {
                 headers: {
                     Cookie: `accessToken=${accessToken}`,
                 }
@@ -156,7 +158,7 @@ export const addFoodItem = createAsyncThunk(
     async (newFoodItem) => {
         try {
             const accessToken = await SecureStore.getItemAsync('accessToken');
-            const response = await axios.post('http://192.168.43.233:5000/food/createFoodEntry', newFoodItem, {
+            const response = await axios.post(`${baseUrl}/food/createFoodEntry`, newFoodItem, {
                 headers: {
                     Cookie: `accessToken=${accessToken}`,
                 }
@@ -176,7 +178,7 @@ export const addMeal = createAsyncThunk(
     async (newMeal) => {
         try {
             const accessToken = await SecureStore.getItemAsync('accessToken');
-            const response = await axios.post('http://192.168.43.233:5000/food/meals', newMeal, {
+            const response = await axios.post(`${baseUrl}/food/meals`, newMeal, {
                 headers: {
                     Cookie: `accessToken=${accessToken}`,
                 }
@@ -191,6 +193,41 @@ export const addMeal = createAsyncThunk(
     }
 )
 
+export const updateMeal = createAsyncThunk(
+    'mealsEditMeal',
+    async (updatedMeal) => {
+        try {
+            const accessToken = await SecureStore.getItemAsync('accessToken');
+            const response = await axios.put(`${baseUrl}/food/meals/${updatedMeal.id}`, updatedMeal, {
+                headers: {
+                    Cookie: `accessToken=${accessToken}`,
+                }
+            });
+            console.log(response.data);
+            return response.data;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+)
+
+export const deleteMeal = createAsyncThunk(
+    'mealsDeleteMeal',
+    async (meal) => {
+        try {
+            const accessToken = await SecureStore.getItemAsync('accessToken');
+            const response = await axios.delete(`${baseUrl}/food/meals/${meal.id}`, {
+                headers: {
+                    Cookie: `accessToken=${accessToken}`,
+                }
+            });
+            return meal.id;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+)
+
 const mealsSlice = createSlice({
     name: 'meals',
     initialState: {
@@ -198,10 +235,19 @@ const mealsSlice = createSlice({
         isFoodEntryModalOpen: false,
         foodList: {},
         meals: [],
+        mealCreateForm: {
+            id: '',
+            name: '',
+            info: '',
+            foodItems: []
+        }
     },
     reducers: {
         openFoodEntryForm: (state, action) => {
             state.isFoodEntryModalOpen = action.payload;
+        },
+        setMealCreateForm: (state, action) => {
+            state.mealCreateForm = action.payload;
         }
     },
     extraReducers: {
@@ -215,7 +261,41 @@ const mealsSlice = createSlice({
             state.foodList = action.payload;
         },
         [getMeals.fulfilled]: (state, action) => {
-            state.meals = action.payload;
+            state.meals = action.payload.map((mealEntry) => ({
+                ...mealEntry,
+                foodItems: mealEntry.foodItems.map((foodItem) => ({
+                    foodOption: foodItem.foodDataId,
+                    foodOptionLabel: foodItem.foodData.food,
+                    amount: foodItem.amount
+                }))
+            }));
+        },
+        [updateMeal.fulfilled]: (state, action) => {
+            console.log(action.payload);
+            state.meals = state.meals.map((meal) => {
+                if (meal.id === action.payload.id) {
+                    console.log({
+                        ...action.payload,
+                        foodItems: action.payload.foodItems.map((foodItem) => ({
+                            foodOption: foodItem.foodDataId,
+                            foodOptionLabel: foodItem.foodData.food,
+                            amount: foodItem.amount
+                        }))
+                    });
+                    return {
+                        ...action.payload,
+                        foodItems: action.payload.foodItems.map((foodItem) => ({
+                            foodOption: foodItem.foodDataId,
+                            foodOptionLabel: foodItem.foodData.food,
+                            amount: foodItem.amount
+                        }))
+                    };
+                }
+                return meal;
+            });
+        },
+        [deleteMeal.fulfilled]: (state, action) => {
+            state.meals = state.meals.filter((meal) => meal.id !== action.payload);
         },
         [addFoodItem.fulfilled]: (state, action) => {
             state.isFoodEntryModalOpen = false;
@@ -227,7 +307,7 @@ const mealsSlice = createSlice({
     }
 })
 
-export const { openFoodEntryForm } = mealsSlice.actions;
+export const { openFoodEntryForm, setMealCreateForm } = mealsSlice.actions;
 
 const rootReducer = combineReducers({
     account: accountSlice.reducer,

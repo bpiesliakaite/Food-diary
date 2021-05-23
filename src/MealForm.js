@@ -8,7 +8,7 @@ import { ListItem } from 'native-base';
 import { Body } from 'native-base';
 import { Right } from 'native-base';
 import { useDispatch, useSelector } from 'react-redux';
-import { addMeal, loadMealSelectOptions, MealTypeEnum } from './redux/store';
+import { addMeal, loadMealSelectOptions, MealTypeEnum, setMealCreateForm, updateMeal } from './redux/store';
 
 
 const FoodGroupEnum = Object.freeze({
@@ -30,7 +30,8 @@ const MealForm = () => {
     const [errors, setErrors] = useState({});
     const [foodItemForm, setFoodItemForm] = useState({});
     const [foodItemEditKey, setFootItemEditKey] = useState('');
-
+    const mealFormState = useSelector(state => state.meals.mealCreateForm);
+    const [isModalOpen, setModal] = useState(false);
 
     const onFoodGroupChange = (newValue) => {
         setFoodItemForm(previousState => ({ ...previousState, foodGroup: newValue }));
@@ -52,21 +53,12 @@ const MealForm = () => {
 
     }, [foodOptions])
 
-    const [mealFormState, setMealFormState] = useState({
-        name: '',
-        info: '',
-        foodItems: []
-    });
-
-
-    const [isModalOpen, setModal] = useState(false);
 
     const addFoodItem = () => {
         setModal(true);
     }
 
     const editFoodItem = (key, foodItem) => {
-        console.log(key, foodItem);
         setFootItemEditKey(key);
         setFoodItemForm(foodItem);
         setModal(true);
@@ -84,29 +76,43 @@ const MealForm = () => {
 
     const submitFoodItem = () => {
         if (foodItemEditKey !== '') {
-            setMealFormState({
+            dispatch(setMealCreateForm({
                 ...mealFormState,
                 foodItems:
                     mealFormState.foodItems.map((value, index) => index === foodItemEditKey ? foodItemForm : value),
-            });
+            }));
         } else {
-            setMealFormState({
+            dispatch(setMealCreateForm({
                 ...mealFormState,
                 foodItems: [
                     ...mealFormState.foodItems,
                     foodItemForm
                 ]
-            });
+            }));
         }
         setFootItemEditKey('');
         closeModalForm();
     }
 
     const removeFoodItem = (key) => {
-        setMealFormState({
+        dispatch(setMealCreateForm({
             ...mealFormState,
             foodItems: mealFormState.foodItems.filter((value, index) => index !== key),
-        })
+        }));
+    }
+
+    const onNameChange = (val) => {
+        dispatch(setMealCreateForm({
+            ...mealFormState,
+            name: val
+        }));
+    }
+
+    const onInfoChange = (val) => {
+        dispatch(setMealCreateForm({
+            ...mealFormState,
+            info: val
+        }));
     }
 
     const options = Object.values(FoodGroupEnum).map(value =>
@@ -121,10 +127,24 @@ const MealForm = () => {
     const foodOptionsDictionary = foodOptions.reduce((foodMap, value) => ({ ...foodMap, [value.id]: value }), {});
 
     const onSubmit = () => {
-        dispatch(addMeal({
-            ...mealFormState,
-            amount: parseInt(mealFormState.amount),
-        }));
+        if (!mealFormState.id) {
+            dispatch(addMeal({
+                ...mealFormState,
+                amount: parseInt(mealFormState.amount),
+            }));
+        } else {
+            dispatch(updateMeal({
+                ...mealFormState,
+                amount: parseInt(mealFormState.amount),
+            }));
+            dispatch(setMealCreateForm({
+                id: '',
+                name: '',
+                info: '',
+                foodItems: []
+            }));
+        }
+        
         history.push('/meals');
     }
 
@@ -208,7 +228,7 @@ const MealForm = () => {
                 <Label style={{ color: 'blue', fontSize: 13 }}>Name</Label>
                 <Input
                     value={mealFormState.name}
-                    onChangeText={(val) => setMealFormState(previousState => ({ ...previousState, name: val }))}
+                    onChangeText={onNameChange}
                 />
             </Item>
 
@@ -217,7 +237,7 @@ const MealForm = () => {
                 <Textarea
                     bordered
                     value={mealFormState.info}
-                    onChangeText={(val) => setMealFormState(previousState => ({ ...previousState, info: val }))}
+                    onChangeText={onInfoChange}
                     style={{ width: '100%', margin: 0, fontSize: 13 }}
                 />
             </Item>

@@ -1,10 +1,10 @@
 import React, { Component, useEffect, useState } from 'react';
 import { Container, Label, Item, Input, View, Text, Icon, Fab, Left, Body, Right, Subtitle, Title, Button } from 'native-base';
-import { TouchableHighlight } from 'react-native';
+import { Modal, TouchableHighlight } from 'react-native';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import Tooltip from 'react-native-walkthrough-tooltip';
 import { useDispatch, useSelector } from 'react-redux';
-import { getFoodList, getMeals } from './redux/store';
+import { deleteMeal, getFoodList, getMeals, setMealCreateForm } from './redux/store';
 import { useHistory } from 'react-router';
 
 export default function Meals() {
@@ -20,8 +20,49 @@ export default function Meals() {
     const meals = useSelector(state => state.meals.meals);
 
     const [isInfoTooltipVisible, setInfoTootlipVisible] = useState(false);
+    const [deleteMealModal, setDeleteMealModal] = useState(null);
+
+    const deleteMealAction = (meal) => {
+        setDeleteMealModal(meal);
+    }
+
+    const cancelDeleteMealAction = () => {
+        setDeleteMealModal(null);
+    }
+
+    const submitDeleteMealAction = () => {
+        dispatch(deleteMeal(deleteMealModal));
+        setDeleteMealModal(null);
+    }
+
+    const updateMealAction = (meal) => {
+        dispatch(setMealCreateForm(meal));
+        history.push('/meals/edit');
+    }
+
+    const openMealAddForm = () => {
+        dispatch(setMealCreateForm({
+            id: '',
+            name: '',
+            info: '',
+            foodItems: []
+        }));
+        history.push('/meals/create');
+    }
+
     return (
         <Container>
+            <Modal visible={!!deleteMealModal}>
+                <View style={{ alignItems: 'center' }}>
+                    <Text>Are you sure you want to delete this meal?</Text>
+                    <Button onPress={() => submitDeleteMealAction()}>
+                        <Text>Delete</Text>
+                    </Button>
+                    <Button onPress={() => cancelDeleteMealAction()}>
+                        <Text>Cancel</Text>
+                    </Button>
+                </View>
+            </Modal>
             <View style={{ alignItems: 'center' }}>
                 <Tooltip
                     isVisible={isInfoTooltipVisible}
@@ -43,6 +84,12 @@ export default function Meals() {
                     <View style={{ backgroundColor: 'white', paddingBottom: 30, borderColor: 'blue', borderBottomWidth: 0, borderTopWidth: 1 }}>
                         <Text style={{ fontWeight: 'bold', textAlign: 'center' }}>{data.item.name}</Text>
                         <Text style={{ color: 'grey' }}>{data.item.info}</Text>
+                        <Button onPress={() => deleteMealAction(data.item)}>
+                            <Text>Delete</Text>
+                        </Button>
+                        <Button onPress={() => updateMealAction(data.item)}>
+                            <Text>Edit</Text>
+                        </Button>
                     </View>
                 )}
                 renderHiddenItem={(data, rowMap) => (
@@ -61,7 +108,7 @@ export default function Meals() {
                 containerStyle={{}}
                 style={{ backgroundColor: '#5067FF' }}
                 position="bottomRight"
-                onPress={() => history.push('/meals/create')}
+                onPress={openMealAddForm}
             ><Icon type="Octicons" name="plus" /></Fab>
         </Container>
     );
