@@ -1,10 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, Image, TextInput, Button, TouchableOpacity, BackHandler, Alert } from 'react-native';
+import { StyleSheet, Text, Image, TextInput, Button, TouchableOpacity, BackHandler, Alert, } from 'react-native';
 import { View } from 'native-base';
 import { Link, useHistory } from 'react-router-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { accountLogin } from './redux/store';
+import { LinearGradient } from 'expo-linear-gradient';
 
 BackHandler.addEventListener('hardwareBackPress', function () {
   return true;
@@ -17,6 +18,7 @@ export default function LoginForm() {
   const account = useSelector(state => state.account.account);
   const dispatch = useDispatch();
   const history = useHistory();
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     if (!!account) {
@@ -24,55 +26,77 @@ export default function LoginForm() {
     }
   }, [account]);
 
-
-
   const onSubmit = () => {
     dispatch(accountLogin({ email, password }));
+    const errors = {};
+    let hasErrors = false;
+
+    if (!email) {
+      hasErrors = true;
+      errors.email = 'Enter email value';
+    }
+    if (!password) {
+      hasErrors = true;
+      errors.password = 'Enter password value';
+    }
+    if (hasErrors) {
+      setErrors(errors);
+    } else {
+      dispatch(accountLogin({ email, password }))
+    }
   }
+  console.log(account);
+
+  useEffect(() => {
+    setErrors({});
+  }, []);
 
   return (
 
     <View style={styles.container}>
+      <LinearGradient colors={['#FFFCF7', '#E4F0D0', '#81B29A', '#2A9D8F']} style={styles.container}>
 
-      <Image style={styles.image} source={require("../assets/food_icon.png")} />
-      <StatusBar style="auto" />
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.TextInput}
-          placeholder="Email"
-          placeholderTextColor="#003f5c"
-          value={email}
-          onChangeText={(email) => setEmail(email)}
-        />
-      </View>
+        <Image style={styles.image} source={require("../assets/food_icon.png")} />
+        <StatusBar style="auto" />
+        <View style={styles.inputView}>
+          <TextInput
+            style={styles.TextInput}
+            placeholder="Email"
+            placeholderTextColor="#003f5c"
+            value={email}
+            onChangeText={(email) => setEmail(email)}
+          />
+          {errors.email ? <Text style={{ color: 'red', fontSize: 9 }}>{errors.email}</Text> : null}
+        </View>
 
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.TextInput}
-          placeholder="Password"
-          placeholderTextColor="#003f5c"
-          secureTextEntry={true}
-          value={password}
-          onChangeText={(password) => setPassword(password)}
-        />
-      </View>
+        <View style={styles.inputView}>
+          <TextInput
+            style={styles.TextInput}
+            placeholder="Password"
+            placeholderTextColor="#003f5c"
+            secureTextEntry={true}
+            value={password}
+            onChangeText={(password) => setPassword(password)}
+          />
+          {errors.password ? <Text style={{ color: 'red', fontSize: 9 }}>{errors.password}</Text> : null}
+        </View>
 
-      <TouchableOpacity>
-        <Link style={styles.forgot_button} to="/remind-password">
-          <Text style={styles.forgot_button}>Forgot Password?</Text>
-        </Link>
-      </TouchableOpacity>
-
-      <TouchableOpacity onPress={onSubmit}>
-        <Text style={styles.loginText}>LOGIN</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity>
-        <Link style={styles.create_button} to="/create-account">
+        {/* <TouchableOpacity> */}
+        <Link component={TouchableOpacity} style={styles.create_button} to="/create-account">
           <Text style={styles.create_button}>Don't have an account? Create one!</Text>
         </Link>
-      </TouchableOpacity>
+        {/* </TouchableOpacity> */}
 
+        <TouchableOpacity style={styles.createBtn} onPress={onSubmit}>
+          <Text style={color = "white"}>LOGIN</Text>
+        </TouchableOpacity>
+
+        {/* <TouchableOpacity style={styles.createBtn} onPress={onSubmit}>
+        <Text style={styles.loginText}>CREATE AN ACCOUNT</Text>
+      </TouchableOpacity> */}
+
+
+      </LinearGradient>
     </View>
   );
 }
@@ -95,12 +119,11 @@ const styles = StyleSheet.create({
   },
 
   inputView: {
-    backgroundColor: "#FFC0CB",
+    backgroundColor: "#FFFCF7",
     borderRadius: 30,
     width: "70%",
     height: 45,
     marginBottom: 20,
-
     alignItems: "center",
   },
 
@@ -133,9 +156,19 @@ const styles = StyleSheet.create({
   create_button: {
     height: 30,
     marginBottom: 30,
-    color: "grey",
-    backgroundColor: "white",
+    color: "#264653",
     borderRadius: 55,
+
+  },
+
+  createBtn: {
+    width: "80%",
+    borderRadius: 25,
+    height: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 40,
+    backgroundColor: "#E07A5F",
   },
 
 });
