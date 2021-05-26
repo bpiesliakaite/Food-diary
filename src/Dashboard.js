@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal } from 'react-native';
+import { format, addDays, isToday } from 'date-fns';
 import { Accordion, View, Text, Icon, Fab, Button, ListItem, Left, Body, Right, List } from 'native-base';
 import { useDispatch, useSelector } from 'react-redux';
 import { getFoodList, openFoodEntryForm, MealTypeEnum } from './redux/store';
@@ -51,13 +52,9 @@ const FoodGroupIcons = Object.freeze({
 
 
 export default function Dashboard() {
-
-    useEffect(() => {
-        dispatch(getFoodList());
-    }, []);
     const foodList = useSelector(state => state.meals.foodList);
     const renderList = (mealType) => (
-        foodList[mealType] ? foodList[mealType].map((value, index) => (
+        foodList && foodList[mealType] ? foodList[mealType].map((value, index) => (
             <ListItem icon key={index}>
                 <Left>
                     {FoodGroupIcons[value.group] || <Button style={{ backgroundColor: "#FF9501" }}>
@@ -77,6 +74,12 @@ export default function Dashboard() {
         { title: MealTypeEnum.Dinner, content: renderList(MealTypeEnum.Dinner) },
         { title: MealTypeEnum.Snacks, content: renderList(MealTypeEnum.Snacks) },
     ];
+
+    const [date, setDate] = useState(new Date());
+
+    const addDaysClick = (amount) => {
+        setDate(previous => addDays(previous, amount))
+    }
 
     const renderHeader = (item, expanded) => {
         return (
@@ -107,20 +110,33 @@ export default function Dashboard() {
 
     const dispatch = useDispatch();
 
+    useEffect(() => {
+        dispatch(getFoodList(date));
+    }, [date]);
+
     const onFoodEntryCreateClick = () => {
         dispatch(openFoodEntryForm(true));
     }
 
     return (
         <>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+                <Button onPress={() => addDaysClick(-1)}>
+                    <Text>{'<'}</Text>
+                </Button>
+                <Text>{format(date, 'yyyy-MM-dd')}</Text>
+                <Button disabled={isToday(date)}onPress={() => addDaysClick(1)}>
+                    <Text>{'>'}</Text>
+                </Button>
+            </View>
             <Accordion dataArray={dataArray} expanded={[]} renderHeader={renderHeader} renderContent={renderContent} />
-            <Fab
+            {isToday(date) ? <Fab
                 direction="up"
                 containerStyle={{}}
                 style={{ backgroundColor: '#5067FF' }}
                 position="bottomRight"
                 onPress={onFoodEntryCreateClick}
-            ><Icon type="Octicons" name="plus" /></Fab>
+            ><Icon type="Octicons" name="plus" /></Fab> : null}
             <FoodEntryForm />
         </>
     );

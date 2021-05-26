@@ -4,7 +4,7 @@ import { Redirect, Route } from 'react-router-native';
 
 const AuthorizedRoute = (props) => {
     const isUserLoggedIn = useSelector(state => !!state.account.account);
-
+    
     if (!isUserLoggedIn) {
         return <Route {...props} component={() => <Redirect exact to="/" />} />
     }

@@ -3,7 +3,7 @@ import * as SecureStore from 'expo-secure-store';
 import axios from 'axios';
 import cookieParser from 'set-cookie-parser';
 
-const baseUrl = 'http://192.168.42.85:5000';
+const baseUrl = 'http://192.168.43.178:5000';
 
 // Account
 export const accountRegister = createAsyncThunk(
@@ -53,8 +53,10 @@ export const accountLogout = createAsyncThunk(
     'accountLogout',
     async () => {
         try {
+            const accessToken = await SecureStore.getItemAsync('accessToken');
+            await axios.post(`${baseUrl}/auth/logout`);
             await SecureStore.deleteItemAsync('accessToken');
-            return null;
+            return true;
         } catch (error) {
             console.log(error);
         }
@@ -78,7 +80,7 @@ const accountSlice = createSlice({
         [accountAuthorize.fulfilled]: (state, action) => {
             state.account = action.payload;
         },
-        [accountLogout.pending]: (state, action) => {
+        [accountLogout.fulfilled]: (state, action) => {
             state.account = undefined;
         }
     }
@@ -135,10 +137,13 @@ export const getMeals = createAsyncThunk(
 
 export const getFoodList = createAsyncThunk(
     'mealsGetFoodList',
-    async () => {
+    async (date) => {
         try {
             const accessToken = await SecureStore.getItemAsync('accessToken');
             const response = await axios.get(`${baseUrl}/food/foodEntries`, {
+                params: {
+                    date,
+                },
                 headers: {
                     Cookie: `accessToken=${accessToken}`,
                 }
