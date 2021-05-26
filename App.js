@@ -6,7 +6,7 @@ import { Container, Header, Content, Right, Button, Icon } from 'native-base';
 import AppLoading from 'expo-app-loading';
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
-import { Provider, useDispatch } from 'react-redux';
+import { Provider, useDispatch, useSelector } from 'react-redux';
 import store, { accountLogout } from './src/redux/store'
 
 import AuthorizedRoute from './src/components/AuthorizedRoute';
@@ -28,12 +28,19 @@ const AppHeader = () => {
   const history = useHistory();
   const dispatch = useDispatch();
 
+  const isLoggedIn = useSelector(state => !!state.account.account);
+
   const onLogoutClick = () => {
     dispatch(accountLogout());
-    history.push('/');
   }
 
-  return (
+  useEffect(() => {
+    if (!isLoggedIn) {
+      history.push('/');
+    }
+  }, [isLoggedIn])
+
+  return isLoggedIn ? (
     <Header style={{ height: 60 }}>
       <Right style={{ marginTop: 20 }}>
         <Button transparent onPress={onLogoutClick}>
@@ -41,7 +48,7 @@ const AppHeader = () => {
         </Button>
       </Right>
     </Header>
-  );
+  ) : null;
 }
 
 export default function App() {
