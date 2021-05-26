@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal } from 'react-native';
 import { Accordion, View, Text, Icon, Fab, Button, ListItem, Left, Body, Right, List } from 'native-base';
 import { useDispatch, useSelector } from 'react-redux';
-import { getFoodList, openFoodEntryForm, MealTypeEnum } from './redux/store';
+import { getFoodList, openFoodEntryForm, MealTypeEnum, openMealEntryForm } from './redux/store';
 import FoodEntryForm from './FoodEntryForm';
+import MealEntryForm from './MealEntryForm';
 
 
 const FoodGroupIcons = Object.freeze({
@@ -59,15 +60,29 @@ export default function Dashboard() {
     const renderList = (mealType) => (
         foodList[mealType] ? foodList[mealType].map((value, index) => (
             <ListItem icon key={index}>
-                <Left>
+                {value.meal && <>
+                    <Left>
+                        <Button style={{ backgroundColor: '#5067FF', borderRadius: 25 }}>
+                            <Icon active type="MaterialCommunityIcons" name="food" style={{ color: 'white' }} />
+                        </Button>
+                    </Left>
+                    <Body><Text>{value.meal.name}</Text></Body>
+                    <Right>
+                        <Text>{value.amount} portions</Text>
+                    </Right>
+                </>}
+                {!value.meal && <>
+                    <Left>
                     {FoodGroupIcons[value.group] || <Button style={{ backgroundColor: "#FF9501" }}>
                         <Icon active name="airplane" />
                     </Button>}
-                </Left>
-                <Body><Text>{value.food}</Text></Body>
-                <Right>
-                    <Text>{value.amount}{value.group === 'Alcohol' ? ' ml' : ' g'}</Text>
-                </Right>
+                    </Left>
+                    <Body><Text>{value.food}</Text></Body>
+                    <Right>
+                        <Text>{value.amount}{value.group === 'Alcohol' ? ' ml' : ' g'}</Text>
+                    </Right>
+                </>}
+                
             </ListItem>
         )) : null);
 
@@ -108,20 +123,38 @@ export default function Dashboard() {
     const dispatch = useDispatch();
 
     const onFoodEntryCreateClick = () => {
+        setFabActive(false);
         dispatch(openFoodEntryForm(true));
     }
+
+    const onMealEntryCreateClick = () => {
+        setFabActive(false);
+        dispatch(openMealEntryForm(true));
+    }
+
+    const [fabActive, setFabActive] = useState(false);
 
     return (
         <>
             <Accordion dataArray={dataArray} expanded={[]} renderHeader={renderHeader} renderContent={renderContent} />
             <Fab
+                active={fabActive}
                 direction="up"
                 containerStyle={{}}
                 style={{ backgroundColor: '#5067FF' }}
                 position="bottomRight"
-                onPress={onFoodEntryCreateClick}
-            ><Icon type="Octicons" name="plus" /></Fab>
+                onPress={() => setFabActive(!fabActive)}
+                >
+                <Icon type="Octicons" name="plus" />
+                <Button style={{ backgroundColor: '#5067FF' }} onPress={onFoodEntryCreateClick}>
+                    <Icon type="MaterialCommunityIcons" name="food-apple" />
+                </Button>
+                <Button style={{ backgroundColor: '#5067FF' }} onPress={onMealEntryCreateClick}>
+                    <Icon type="MaterialCommunityIcons" name="food" />
+                </Button>
+            </Fab>
             <FoodEntryForm />
+            <MealEntryForm />
         </>
     );
 }

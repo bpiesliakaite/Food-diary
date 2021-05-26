@@ -173,6 +173,26 @@ export const addFoodItem = createAsyncThunk(
     }
 )
 
+export const addMealItem = createAsyncThunk(
+    'mealsAddFoodMealItem',
+    async (newFoodItem) => {
+        try {
+            const accessToken = await SecureStore.getItemAsync('accessToken');
+            const response = await axios.post(`${baseUrl}/food/createMealEntry`, newFoodItem, {
+                headers: {
+                    Cookie: `accessToken=${accessToken}`,
+                }
+            });
+            if (response.status !== 201) {
+                throw Error('creation failed');
+            }
+            return response.data;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+)
+
 export const addMeal = createAsyncThunk(
     'mealsAddMeal',
     async (newMeal) => {
@@ -233,6 +253,7 @@ const mealsSlice = createSlice({
     initialState: {
         mealSelectOptions: [],
         isFoodEntryModalOpen: false,
+        isMealEntryModalOpen: false,
         foodList: {},
         meals: [],
         mealCreateForm: {
@@ -245,6 +266,9 @@ const mealsSlice = createSlice({
     reducers: {
         openFoodEntryForm: (state, action) => {
             state.isFoodEntryModalOpen = action.payload;
+        },
+        openMealEntryForm: (state, action) => {
+            state.isMealEntryModalOpen = action.payload;
         },
         setMealCreateForm: (state, action) => {
             state.mealCreateForm = action.payload;
@@ -271,7 +295,6 @@ const mealsSlice = createSlice({
             }));
         },
         [updateMeal.fulfilled]: (state, action) => {
-            console.log(action.payload);
             state.meals = state.meals.map((meal) => {
                 if (meal.id === action.payload.id) {
                     console.log({
@@ -299,6 +322,13 @@ const mealsSlice = createSlice({
         },
         [addFoodItem.fulfilled]: (state, action) => {
             state.isFoodEntryModalOpen = false;
+            console.log(action.payload);
+
+            state.foodList[action.payload.mealType] = [...(state.foodList[action.payload.mealType] || []), action.payload];
+        },
+        [addMealItem.fulfilled]: (state, action) => {
+            state.isMealEntryModalOpen = false;
+            console.log(action.payload);
             state.foodList[action.payload.mealType] = [...(state.foodList[action.payload.mealType] || []), action.payload];
         },
         [addMeal.fulfilled]: (state, action) => {
@@ -307,7 +337,7 @@ const mealsSlice = createSlice({
     }
 })
 
-export const { openFoodEntryForm, setMealCreateForm } = mealsSlice.actions;
+export const { openFoodEntryForm, setMealCreateForm, openMealEntryForm } = mealsSlice.actions;
 
 const rootReducer = combineReducers({
     account: accountSlice.reducer,
