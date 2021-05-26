@@ -1,73 +1,114 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, Image, TextInput, Button, TouchableOpacity, } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, Image, TextInput, Modal, TouchableOpacity, } from 'react-native';
 import { Link } from 'react-router-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { accountRegister } from './redux/store';
+import { LinearGradient } from 'expo-linear-gradient';
 
 
 export default function CreateAccountForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
+  const [errors, setErrors] = useState({});
+  // const isOpen = useSelector(state => state.repeatPassword);
 
   const registered = useSelector(state => state.account.registered);
   const dispatch = useDispatch();
   const onSubmit = () => {
     console.log('pressed');
-    dispatch(accountRegister({ email, password }))
+    const errors = {};
+    let hasErrors = false;
+
+    if (!email) {
+      hasErrors = true;
+      errors.email = 'Enter email value';
+    }
+    if (!password) {
+      hasErrors = true;
+      errors.password = 'Enter password value';
+    }
+    if (!repeatPassword) {
+      hasErrors = true;
+      errors.repeatPassword = 'Enter Repeat Password value';
+    }
+    if (password !== repeatPassword) {
+      hasErrors = true;
+      errors.passwordMatching = 'Passwords do not match';
+    }
+    if (password.length <= 6 || repeatPassword.length <= 6) {
+      hasErrors = true;
+      errors.passwordLenght = 'Password must contain at least 6 symbols'
+    }
+
+    if (hasErrors) {
+      setErrors(errors);
+    } else {
+      dispatch(accountRegister({ email, password }))
+    }
   }
   console.log(registered);
 
+  useEffect(() => {
+    setErrors({});
+  }, []);
+
   return (
+    //<Modal visible={isOpen} onDismiss={onFormDismiss} transparent>
     <View style={styles.container}>
-      <Text>{registered}</Text>
-      <Image style={styles.image} source={require("../assets/food_icon.png")} />
-      <StatusBar style="auto" />
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.TextInput}
-          placeholder="Email"
-          placeholderTextColor="#003f5c"
-          value={email}
-          onChangeText={(email) => setEmail(email)}
-        />
-      </View>
+      <LinearGradient colors={['#FFFCF7', '#E4F0D0', '#81B29A', '#2A9D8F']} style={styles.container}>
+        <Text>{registered}</Text>
+        <Image style={styles.image} source={require("../assets/food_icon.png")} />
+        <StatusBar style="auto" />
+        <View style={styles.inputView}>
+          {/* <View style={{ ...styles.inputView, borderColor: errors.email ? 'red' : 'transparent' }}> */}
+          <TextInput
+            style={styles.TextInput}
+            placeholder="Email"
+            placeholderTextColor="#003f5c"
+            value={email}
+            onChangeText={(email) => setEmail(email)}
+          />
+          {errors.email ? <Text style={{ color: 'red', fontSize: 9 }}>{errors.email}</Text> : null}
+        </View >
 
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.TextInput}
-          placeholder="Password"
-          placeholderTextColor="#003f5c"
-          secureTextEntry={true}
-          value={password}
-          onChangeText={(password) => setPassword(password)}
-        />
-      </View>
+        <View style={styles.inputView}>
+          <TextInput
+            style={styles.TextInput}
+            placeholder="Password"
+            placeholderTextColor="#003f5c"
+            secureTextEntry={true}
+            value={password}
+            onChangeText={(password) => setPassword(password)}
+          />
+          {errors.password ? <Text style={{ color: 'red', fontSize: 9 }}>{errors.password}</Text> : null}
+        </View>
 
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.TextInput}
-          placeholder="Repeat the password"
-          placeholderTextColor="#003f5c"
-          secureTextEntry={true}
-          value={repeatPassword}
-          onChangeText={(repeatPassword) => setRepeatPassword(repeatPassword)}
-        />
-      </View>
+        <View style={styles.inputView}>
+          <TextInput
+            style={styles.TextInput}
+            placeholder="Repeat the password"
+            placeholderTextColor="#003f5c"
+            secureTextEntry={true}
+            value={repeatPassword}
+            onChangeText={(repeatPassword) => setRepeatPassword(repeatPassword)}
+          />
+          {errors.repeatPassword ? <Text style={{ color: 'red', fontSize: 9 }}>{errors.repeatPassword}</Text> : null}
+        </View>
+        {errors.passwordMatching ? <Text style={{ color: 'red', fontSize: 9, paddingBottom: 20 }}>{errors.passwordMatching}</Text> : null}
+        {errors.passwordLenght ? <Text style={{ color: 'red', fontSize: 9, paddingBottom: 20 }}>{errors.passwordLenght}</Text> : null}
 
-      <TouchableOpacity>
-        <Link style={styles.login_button} to="/login">
-          <Text style={styles.login_button}>I already have an account</Text>
+        <Link component={TouchableOpacity} style={styles.create_button} to="/login">
+          <Text style={styles.create_button}>I already have an account</Text>
         </Link>
-      </TouchableOpacity>
 
-
-
-      <TouchableOpacity style={styles.createBtn} onPress={onSubmit}>
-        <Text style={styles.loginText}>CREATE AN ACCOUNT</Text>
-      </TouchableOpacity>
+        <TouchableOpacity style={styles.createBtn} onPress={onSubmit}>
+          <Text style={styles.loginText}>CREATE AN ACCOUNT</Text>
+        </TouchableOpacity>
+      </LinearGradient>
     </View>
+    //</Modal >
   );
 }
 
@@ -87,7 +128,7 @@ const styles = StyleSheet.create({
   },
 
   inputView: {
-    backgroundColor: "#FFC0CB",
+    backgroundColor: "#FFFCF7",
     borderRadius: 30,
     width: "70%",
     height: 45,
@@ -105,8 +146,7 @@ const styles = StyleSheet.create({
   login_button: {
     height: 30,
     marginBottom: 30,
-    color: "grey",
-    backgroundColor: "white",
+    color: "#264653",
     borderRadius: 55,
   },
 
@@ -117,7 +157,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginTop: 40,
-    backgroundColor: "#FF1493",
+    backgroundColor: "#E07A5F",
   },
 });
 

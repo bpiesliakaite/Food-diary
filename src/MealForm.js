@@ -191,11 +191,15 @@ const MealForm = () => {
                                 {foodOptionItems}
                             </Picker>
                         </Item>
+
                         <Label style={{ color: 'blue', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Amount ({foodItemForm.foodGroup === FoodGroupEnum.Alcohol ? 'ml' : 'grams'})</Label>
+
                         <Item error={!!errors.amount}>
                             <Input keyboardType="numeric" value={foodItemForm.amount} onChangeText={(val) => setFoodItemForm(previousState => ({ ...previousState, amount: val }))} placeholder="Enter Amount" />
                         </Item>
+
                         {errors.amount ? <Text style={{ marginLeft: 15, color: 'red', fontSize: 9 }}>{errors.amount}</Text> : null}
+
                         <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 30 }}>
                             <Button onPress={submitFoodItem}><Text>Add Item</Text></Button>
                             <Button onPress={closeModalForm}><Text>Cancel</Text></Button>

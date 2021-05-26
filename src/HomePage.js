@@ -5,6 +5,7 @@ import { StyleSheet, Text, View, Image, TextInput, Button, TouchableOpacity, } f
 import { Container } from 'native-base';
 import { Link, useHistory } from 'react-router-native';
 import { accountAuthorize } from './redux/store';
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function HomePage() {
     const dispatch = useDispatch();
@@ -28,22 +29,36 @@ export default function HomePage() {
 
     return (
         <Container style={styles.container}>
-            <Image style={styles.image} source={require("../assets/food_icon.png")} />
-            <StatusBar style="auto" />
+            <LinearGradient colors={['#FFFCF7', '#E4F0D0', '#81B29A', '#2A9D8F']} style={styles.container}>
+                {/* <Image style={styles.image} source={require("../assets/food_icon.png")} /> */}
+                <StatusBar style="auto" />
 
-            <TouchableOpacity >
 
-                <Button style={styles.loginBtn} onPress={onBeginClick} title="LET'S BEGIN" />
-                {/* <Text style={styles.loginText}>LET'S BEGIN</Text> */}
-            </TouchableOpacity>
-        </Container>
+
+                <Image source={require("../assets/giphy.gif")} style={{ width: "60%", height: "30%" }} />
+
+                <Text style={{ textAlignVertical: "center", textAlign: "center", fontWeight: "bold", fontSize: 20 }} >
+                    Welcome! 👋
+                </Text>
+
+                <Text style={{ textAlignVertical: "center", textAlign: "center", }} >
+                    Monitor Your food easier
+                </Text>
+
+
+                <TouchableOpacity style={styles.createBtn} onPress={onBeginClick}>
+                    <Text style={styles.loginText}>LET'S BEGIN!</Text>
+                </TouchableOpacity>
+
+            </LinearGradient >
+        </Container >
     );
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#fff",
+        // backgroundColor: "#fff",
         alignItems: "center",
         justifyContent: "center",
         width: "100%",
@@ -55,7 +70,7 @@ const styles = StyleSheet.create({
     },
 
     image: {
-        marginBottom: 40,
+        marginBottom: 100,
         width: 80,
         height: 80,
     },
@@ -83,13 +98,27 @@ const styles = StyleSheet.create({
     },
 
     loginBtn: {
+        width: "100%",
+        borderRadius: 25,
+        height: 50,
+        alignItems: "center",
+        justifyContent: "center",
+        marginTop: 40,
+        backgroundColor: "#264653",
+
+    },
+    linearGradient: {
+        flex: 1,
+        height: '100%',
+        width: '100%',
+    },
+    createBtn: {
         width: "80%",
         borderRadius: 25,
         height: 50,
         alignItems: "center",
         justifyContent: "center",
         marginTop: 40,
-        backgroundColor: "#FF1493",
-
+        backgroundColor: "#E07A5F",
     },
 });
