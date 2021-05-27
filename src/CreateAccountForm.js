@@ -37,17 +37,21 @@ export default function CreateAccountForm() {
       hasErrors = true;
       errors.passwordMatching = 'Passwords do not match';
     }
-    if (password.length <= 6 || repeatPassword.length <= 6) {
-      hasErrors = true;
-      errors.passwordLenght = 'Password must contain at least 6 symbols'
-    }
+    // if (password.length <= 6 || repeatPassword.length >= 6) {
+    //   hasErrors = true;
+    //   errors.passwordLenght = 'Password must contain at least 6 symbols'
+    // }
 
     if (hasErrors) {
       setErrors(errors);
     } else {
+
+
       dispatch(accountRegister({ email, password }))
+
     }
   }
+  errors.SuccessfullRegistration = 'Registration successfull! Please log in.';
   console.log(registered);
 
   useEffect(() => {
@@ -97,7 +101,7 @@ export default function CreateAccountForm() {
           {errors.repeatPassword ? <Text style={{ color: 'red', fontSize: 9 }}>{errors.repeatPassword}</Text> : null}
         </View>
         {errors.passwordMatching ? <Text style={{ color: 'red', fontSize: 9, paddingBottom: 20 }}>{errors.passwordMatching}</Text> : null}
-        {errors.passwordLenght ? <Text style={{ color: 'red', fontSize: 9, paddingBottom: 20 }}>{errors.passwordLenght}</Text> : null}
+        {/* {errors.passwordLenght ? <Text style={{ color: 'red', fontSize: 9, paddingBottom: 20 }}>{errors.passwordLenght}</Text> : null} */}
 
         <Link component={TouchableOpacity} style={styles.create_button} to="/login">
           <Text style={styles.create_button}>I already have an account</Text>

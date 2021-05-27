@@ -66,7 +66,7 @@ export default function Meals() {
             <View style={{ alignItems: 'center' }}>
                 <Tooltip
                     isVisible={isInfoTooltipVisible}
-                    content={<Text>Check this out!</Text>}
+                    content={<Text>Here You can create yYour favourite meals to make food journaling easier</Text>}
                     placement="bottom"
                     onClose={() => setInfoTootlipVisible(false)}
                     topAdjustment={Platform.OS === 'android' ? -25 : 0}
