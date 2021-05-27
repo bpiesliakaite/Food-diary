@@ -3,7 +3,7 @@ import * as SecureStore from 'expo-secure-store';
 import axios from 'axios';
 import cookieParser from 'set-cookie-parser';
 
-const baseUrl = 'http://192.168.43.233:5000';
+const baseUrl = 'http://192.168.43.178:5000';
 
 // Account
 export const accountRegister = createAsyncThunk(
@@ -11,7 +11,6 @@ export const accountRegister = createAsyncThunk(
     async (userData, { dispatch }) => {
         try {
             const response = await axios.post(`${baseUrl}/auth/register`, userData);
-            console.log(response);
         } catch (error) {
             console.log(error);
         }
@@ -294,21 +293,14 @@ const mealsSlice = createSlice({
                 foodItems: mealEntry.foodItems.map((foodItem) => ({
                     foodOption: foodItem.foodDataId,
                     foodOptionLabel: foodItem.foodData.food,
-                    amount: foodItem.amount
+                    amount: foodItem.amount,
+                    group: foodItem.foodData.group
                 }))
             }));
         },
         [updateMeal.fulfilled]: (state, action) => {
             state.meals = state.meals.map((meal) => {
                 if (meal.id === action.payload.id) {
-                    console.log({
-                        ...action.payload,
-                        foodItems: action.payload.foodItems.map((foodItem) => ({
-                            foodOption: foodItem.foodDataId,
-                            foodOptionLabel: foodItem.foodData.food,
-                            amount: foodItem.amount
-                        }))
-                    });
                     return {
                         ...action.payload,
                         foodItems: action.payload.foodItems.map((foodItem) => ({

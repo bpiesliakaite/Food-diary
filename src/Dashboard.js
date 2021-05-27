@@ -56,7 +56,7 @@ export default function Dashboard() {
     const foodList = useSelector(state => state.meals.foodList);
     const renderList = (mealType) => (
         foodList && foodList[mealType] ? foodList[mealType].map((value, index) => (
-            <ListItem icon key={index}>
+            value.meal || value.group ? <ListItem icon key={index}>
                 {value.meal && <>
                     <Left>
                         <Button style={{ backgroundColor: '#5067FF', borderRadius: 25 }}>
@@ -70,17 +70,15 @@ export default function Dashboard() {
                 </>}
                 {!value.meal && <>
                     <Left>
-                        {FoodGroupIcons[value.group] || <Button style={{ backgroundColor: "#FF9501" }}>
-                            <Icon active name="airplane" />
-                        </Button>}
+                    {FoodGroupIcons[value.group]}
                     </Left>
                     <Body><Text>{value.food}</Text></Body>
                     <Right>
                         <Text>{value.amount}{value.group === 'Alcohol' ? ' ml' : ' g'}</Text>
                     </Right>
                 </>}
-
-            </ListItem>
+                
+            </ListItem> : null
         )) : null);
 
     const dataArray = [

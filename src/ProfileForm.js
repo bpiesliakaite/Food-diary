@@ -48,9 +48,6 @@ export default class Profile extends Component {
         this.showMode('date');
     }
 
-    showTimepicker = () => {
-        this.showMode('time');
-    }
 
     render() {
 
@@ -96,7 +93,7 @@ export default class Profile extends Component {
                             <DateTimePicker
                                 testID="dateTimePicker"
                                 value={this.state.date}
-                                mode={this.state.mode}
+                                mode={'date'}
                                 is24Hour={true}
                                 display="default"
                                 onChange={this.onChange}
