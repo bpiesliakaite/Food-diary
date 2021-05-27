@@ -49,10 +49,10 @@ const MealEntryForm = () => {
     }
 
     const mealTypeOptions = Object.values(MealTypeEnum).map(value =>
-        <Picker.Item label={value} value={value} key={value} />
+        <Picker.Item label={value} value={value} key={value.toString()} />
     );
 
-    const mealOptions = meals.map(value => <Picker.Item label={value.name} value={value.id} key={value.id} />)
+    const mealOptions = meals.map(value => <Picker.Item label={value.name} value={value.id} key={value.id.toString()} />)
 
     const changePortion = (num) => {
         setMealForm(previousState => ({ ...previousState, amount: (previousState.amount + num) < 1 ? 1 : previousState.amount + num}))

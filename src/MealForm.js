@@ -11,19 +11,20 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addMeal, loadMealSelectOptions, MealTypeEnum, setMealCreateForm, updateMeal } from './redux/store';
 
 
-const FoodGroupEnum = Object.freeze({
-    Vegetables: 'Vegetables',
-    Nuts: 'Nuts',
-    FishMeatEggs: 'Fish, meat, eggs',
-    Fruits: 'Fruits',
-    Grains: 'Grains',
-    Dairy: 'Dairy',
-    SweetsSugarsBeverages: 'Sweets, sugars, beverages',
-    Alcohol: 'Alcohol',
-    Fat: 'Fat',
-});
-
 const MealForm = () => {
+
+    const FoodGroupEnum = Object.freeze({
+        Vegetables: 'Vegetables',
+        Nuts: 'Nuts',
+        FishMeatEggs: 'Fish, meat, eggs',
+        Fruits: 'Fruits',
+        Grains: 'Grains',
+        Dairy: 'Dairy',
+        SweetsSugarsBeverages: 'Sweets, sugars, beverages',
+        Alcohol: 'Alcohol',
+        Fat: 'Fat',
+    });
+
     const history = useHistory();
     const dispatch = useDispatch();
     const foodOptions = useSelector(state => state.meals.mealSelectOptions);
@@ -116,14 +117,14 @@ const MealForm = () => {
     }
 
     const options = Object.values(FoodGroupEnum).map(value =>
-        <Picker.Item label={value} value={value} key={value} />
+        <Picker.Item label={value} value={value} key={value.toString()} />
     );
 
     const mealTypeOptions = Object.values(MealTypeEnum).map(value =>
-        <Picker.Item label={value} value={value} key={value} />
+        <Picker.Item label={value} value={value} key={value.toString()} />
     );
 
-    const foodOptionItems = foodOptions.map(value => <Picker.Item label={value.food} value={value.id} key={value.id} />)
+    const foodOptionItems = foodOptions.map(value => <Picker.Item label={value.food} value={value.id} key={value.id.toString()} />);
     const foodOptionsDictionary = foodOptions.reduce((foodMap, value) => ({ ...foodMap, [value.id]: value }), {});
 
     const onSubmit = () => {
@@ -198,7 +199,9 @@ const MealForm = () => {
                                 {options}
                             </Picker>
                         </Item>
-                        <Label style={{ color: 'blue', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Food</Label>
+
+                        {foodOptionItems.length ? 
+                        <><Label style={{ color: 'blue', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Food</Label>
                         <Item>
                             <Picker
                                 mode="dropdown"
@@ -209,8 +212,23 @@ const MealForm = () => {
                                 style={{ flex: 1, height: 40 }}
                             >
                                 {foodOptionItems}
-                            </Picker>
-                        </Item>
+                            </Picker> 
+                        </Item></> :
+                        <><Label style={{ color: 'blue', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Food</Label>
+                        <Item>
+                            <Picker
+                                mode="dropdown"
+                                iosHeader="Select Meal"
+                                iosIcon={<Icon name="arrow-down" />}
+                                selectedValue={null}
+                                style={{ flex: 1, height: 40 }}
+                            >
+                                <Picker.Item label={'Agar'} value={'Agario'} key={'temp1'} />
+                            </Picker> 
+                        </Item></>
+                    }
+                        
+                        
 
                         <Label style={{ color: 'blue', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Amount ({foodItemForm.foodGroup === FoodGroupEnum.Alcohol ? 'ml' : 'grams'})</Label>
 
@@ -250,7 +268,7 @@ const MealForm = () => {
                 <Label style={{ color: 'blue', fontSize: 13 }}>Consists of</Label>
                 {!mealFormState.foodItems.length && <Text>No items yet</Text>}
                 {mealFormState.foodItems.map((foodItem, indx) => {
-                    return (<ListItem icon key={indx}>
+                    return (<ListItem icon key={indx.toString()}>
 
                         <Body>
                             <Text>{foodItem.foodOptionLabel} - ({foodItem.amount} {foodItem.foodGroup === FoodGroupEnum.Alcohol ? 'ml' : 'grams'})</Text>

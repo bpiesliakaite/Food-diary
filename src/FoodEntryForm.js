@@ -128,19 +128,33 @@ const FoodEntryForm = () => {
                             {options}
                         </Picker>
                     </Item>
-                    <Label style={{ color: 'blue', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Food</Label>
-                    <Item>
-                        <Picker
-                            mode="dropdown"
-                            iosHeader="Select Meal"
-                            iosIcon={<Icon name="arrow-down" />}
-                            selectedValue={food}
-                            onValueChange={onFoodChange}
-                            style={{ flex: 1, height: 40 }}
-                        >
-                            {foodOptionItems}
-                        </Picker>
-                    </Item>
+                    {foodOptionItems.length ? 
+                        <><Label style={{ color: 'blue', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Food</Label>
+                        <Item>
+                            <Picker
+                                mode="dropdown"
+                                iosHeader="Select Meal"
+                                iosIcon={<Icon name="arrow-down" />}
+                                selectedValue={food}
+                                onValueChange={onFoodChange}
+                                style={{ flex: 1, height: 40 }}
+                            >
+                                {foodOptionItems}
+                            </Picker> 
+                        </Item></> :
+                        <><Label style={{ color: 'blue', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Food</Label>
+                        <Item>
+                            <Picker
+                                mode="dropdown"
+                                iosHeader="Select Meal"
+                                iosIcon={<Icon name="arrow-down" />}
+                                selectedValue={null}
+                                style={{ flex: 1, height: 40 }}
+                            >
+                                <Picker.Item label={'Agar'} value={'Agario'} key={'temp1'} />
+                            </Picker> 
+                        </Item></>
+                    }
                     <Label style={{ color: 'blue', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Amount ({foodGroup === FoodGroupEnum.Alcohol ? 'ml' : 'g'})</Label>
                     <Item error={!!errors.amount}>
                         <Input keyboardType="numeric" value={amount} onChangeText={(text) => setAmount(text)} placeholder="Enter Amount" />

@@ -80,8 +80,9 @@ export default function Meals() {
             <SwipeListView
                 style={{ padding: 40 }}
                 data={meals}
-                renderItem={(data, rowMap) => (
-                    <View style={{ backgroundColor: 'white', paddingBottom: 30, borderColor: 'blue', borderBottomWidth: 0, borderTopWidth: 1 }}>
+                keyExtractor={item => item.id.toString()}
+                renderItem={(data) => (
+                    <View key={data.item.id.toString()} style={{ backgroundColor: 'white', paddingBottom: 30, borderColor: 'blue', borderBottomWidth: 0, borderTopWidth: 1 }}>
                         <Text style={{ fontWeight: 'bold', textAlign: 'center' }}>{data.item.name}</Text>
                         <Text style={{ color: 'grey' }}>{data.item.info}</Text>
                         <Button onPress={() => deleteMealAction(data.item)}>
@@ -93,7 +94,7 @@ export default function Meals() {
                     </View>
                 )}
                 renderHiddenItem={(data, rowMap) => (
-                    <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <View key={'options'+data.item.id} style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                         <Text style={{ color: 'blue' }}>Edit</Text>
                         <Text style={{ color: 'red' }}>Delete</Text>
                     </View>

@@ -56,7 +56,7 @@ export default function Dashboard() {
     const foodList = useSelector(state => state.meals.foodList);
     const renderList = (mealType) => (
         foodList && foodList[mealType] ? foodList[mealType].map((value, index) => (
-            <ListItem icon key={index}>
+            <ListItem icon key={index.toString()}>
                 {value.meal && <>
                     <Left>
                         <Button style={{ backgroundColor: '#5067FF', borderRadius: 25 }}>
