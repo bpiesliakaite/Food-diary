@@ -17,14 +17,30 @@ const FoodGroupEnum = Object.freeze({
 });
 
 const FoodEntryForm = () => {
-    const [foodGroup, setFoodGroup] = useState();
+    const [foodGroup, setFoodGroup] = useState(FoodGroupEnum.Vegetables);
     const [food, setFood] = useState();
-    const [mealType, setMealType] = useState();
+    const [mealType, setMealType] = useState(MealTypeEnum.Breakfast);
     const [amount, setAmount] = useState('');
     const [errors, setErrors] = useState({});
     const foodOptions = useSelector(state => state.meals.mealSelectOptions);
     const dispatch = useDispatch();
     const isOpen = useSelector(state => state.meals.isFoodEntryModalOpen);
+
+    useEffect(() => {
+        dispatch(loadMealSelectOptions(foodGroup));
+    }, [])
+
+    useEffect(() => {
+        if (foodOptions.length) {
+            setFood(foodOptions[0].id)
+        }
+    }, [foodOptions])
+
+    useEffect(() => {
+        if (isOpen) {
+            setAmount('');
+        }
+    }, [isOpen])
 
     const onFoodGroupChange = (newValue) => {
         setFoodGroup(newValue);

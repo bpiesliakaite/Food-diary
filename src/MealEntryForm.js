@@ -13,7 +13,7 @@ const MealEntryForm = () => {
     }
 
     const [mealForm, setMealForm] = useState({
-        mealType: '',
+        mealType: MealTypeEnum.Breakfast,
         meal: null,
         amount: 1
     });
@@ -30,12 +30,18 @@ const MealEntryForm = () => {
         dispatch(getMeals());
     }, []);
 
+    useEffect(() => {
+        if (meals.length) {
+            setMealForm(previous => ({ ...previous, meal: meals[0].id }));
+        }
+    }, [meals])
+
     const onSubmit = () => {
         dispatch(addMealItem(mealForm));
         dispatch(openMealEntryForm(true));
         setMealForm({
-            mealType: '',
-            meal: null,
+            mealType: MealTypeEnum.Breakfast,
+            meal: meals[0].id,
             amount: 1
         });
     }

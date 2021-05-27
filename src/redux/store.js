@@ -228,7 +228,6 @@ export const updateMeal = createAsyncThunk(
                     Cookie: `accessToken=${accessToken}`,
                 }
             });
-            console.log(response.data);
             return response.data;
         } catch (error) {
             console.log(error);
