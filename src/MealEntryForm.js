@@ -61,7 +61,7 @@ const MealEntryForm = () => {
     const mealOptions = meals.map(value => <Picker.Item label={value.name} value={value.id} key={value.id} />)
 
     const changePortion = (num) => {
-        setMealForm(previousState => ({ ...previousState, amount: (previousState.amount + num) < 1 ? 1 : previousState.amount + num}))
+        setMealForm(previousState => ({ ...previousState, amount: (previousState.amount + num) < 1 ? 1 : previousState.amount + num }))
     }
 
     return (
@@ -87,7 +87,7 @@ const MealEntryForm = () => {
                     shadowRadius: 3.84,
                     elevation: 5,
                 }}>
-                    <Label style={{ color: 'blue', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Meal Type</Label>
+                    <Label style={{ color: '#056608', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Meal Type</Label>
                     <Item >
                         <Picker
                             mode="dropdown"
@@ -100,7 +100,7 @@ const MealEntryForm = () => {
                             {mealTypeOptions}
                         </Picker>
                     </Item>
-                    <Label style={{ color: 'blue', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Meal</Label>
+                    <Label style={{ color: '#056608', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Meal</Label>
                     <Item >
                         <Picker
                             mode="dropdown"
@@ -113,24 +113,24 @@ const MealEntryForm = () => {
                         </Picker>
                     </Item>
                     {!!mealForm.meal && <>
-                    <Label style={{ color: 'blue', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Portions</Label>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-                        <Button transparent style={{ margin: 15, borderColor: 'black', paddingRight: 60 }} onPress={() => changePortion(-1)}>
-                            <Icon type="MaterialIcons" name="arrow-left" style={{ color: 'black'}} />
-                        </Button>
-                        
-                        <Text style={{ padding: 15 }}>{mealForm.amount}</Text>
-                        <Button transparent style={{ margin: 15, borderColor: 'black', paddingLeft: 60 }} onPress={() => changePortion(1)}>
-                            <Icon type="MaterialIcons" name="arrow-right" style={{ color: 'black'}} />
-                        </Button>
-                    </View></>
+                        <Label style={{ color: '#056608', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Portions</Label>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <Button transparent style={{ margin: 15, borderColor: 'black', paddingRight: 60 }} onPress={() => changePortion(-1)}>
+                                <Icon type="MaterialIcons" name="arrow-left" style={{ color: 'black' }} />
+                            </Button>
+
+                            <Text style={{ padding: 15 }}>{mealForm.amount}</Text>
+                            <Button transparent style={{ margin: 15, borderColor: 'black', paddingLeft: 60 }} onPress={() => changePortion(1)}>
+                                <Icon type="MaterialIcons" name="arrow-right" style={{ color: 'black' }} />
+                            </Button>
+                        </View></>
                     }
-                    
+
                     <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 30 }} >
-                        <Button onPress={onSubmit}><Text>Add Item</Text></Button>
-                        <Button onPress={onFormDismiss}><Text>Cancel</Text></Button>
+                        <Button onPress={onFormDismiss} style={{ backgroundColor: '#81B29A' }}><Text>Cancel</Text></Button>
+                        <Button onPress={onSubmit} style={{ backgroundColor: '#056608' }}><Text>Add Item</Text></Button>
                     </View>
-                    
+
                 </Form>
             </View>
         </Modal>

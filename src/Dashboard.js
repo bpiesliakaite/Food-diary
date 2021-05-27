@@ -70,16 +70,16 @@ export default function Dashboard() {
                 </>}
                 {!value.meal && <>
                     <Left>
-                    {FoodGroupIcons[value.group] || <Button style={{ backgroundColor: "#FF9501" }}>
-                        <Icon active name="airplane" />
-                    </Button>}
+                        {FoodGroupIcons[value.group] || <Button style={{ backgroundColor: "#FF9501" }}>
+                            <Icon active name="airplane" />
+                        </Button>}
                     </Left>
                     <Body><Text>{value.food}</Text></Body>
                     <Right>
                         <Text>{value.amount}{value.group === 'Alcohol' ? ' ml' : ' g'}</Text>
                     </Right>
                 </>}
-                
+
             </ListItem>
         )) : null);
 
@@ -103,7 +103,7 @@ export default function Dashboard() {
                 padding: 10,
                 justifyContent: "space-between",
                 alignItems: "center",
-                backgroundColor: "#A9DAD6"
+                backgroundColor: "#81B29A"
             }} >
                 <Text style={{ fontWeight: "600" }}>
                     {" "}{item.title}
@@ -143,12 +143,12 @@ export default function Dashboard() {
 
     return (
         <>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Button onPress={() => addDaysClick(-1)}>
                     <Text>{'<'}</Text>
                 </Button>
                 <Text>{format(date, 'yyyy-MM-dd')}</Text>
-                <Button disabled={isToday(date)}onPress={() => addDaysClick(1)}>
+                <Button disabled={isToday(date)} onPress={() => addDaysClick(1)}>
                     <Text>{'>'}</Text>
                 </Button>
             </View>
@@ -157,18 +157,18 @@ export default function Dashboard() {
                 active={fabActive}
                 direction="up"
                 containerStyle={{}}
-                style={{ backgroundColor: '#5067FF' }}
+                style={{ backgroundColor: '#056608' }}
                 position="bottomRight"
                 onPress={() => setFabActive(!fabActive)}
-                >
+            >
                 <Icon type="Octicons" name="plus" />
-                <Button style={{ backgroundColor: '#5067FF' }} onPress={onFoodEntryCreateClick}>
+                <Button style={{ backgroundColor: '#81B29A' }} onPress={onFoodEntryCreateClick}>
                     <Icon type="MaterialCommunityIcons" name="food-apple" />
                 </Button>
-                <Button style={{ backgroundColor: '#5067FF' }} onPress={onMealEntryCreateClick}>
+                <Button style={{ backgroundColor: '#81B29A' }} onPress={onMealEntryCreateClick}>
                     <Icon type="MaterialCommunityIcons" name="food" />
                 </Button>
-                </Fab> : null}
+            </Fab> : null}
             <FoodEntryForm />
             <MealEntryForm />
         </>

@@ -4,6 +4,7 @@ import { Container, Header, Content, Switch, Input, Icon, Label, Picker, Button,
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Link } from 'react-router-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { ScrollView } from "react-native-gesture-handler";
 
 export default class Profile extends Component {
 
@@ -54,21 +55,20 @@ export default class Profile extends Component {
     render() {
 
         return (
-            <LinearGradient colors={['#FFFCF7', '#E4F0D0', '#81B29A', '#2A9D8F']} >
-
+            <ScrollView>
                 <Form style={{ padding: 30 }}>
 
                     <Item stackedLabel>
-                        <Label style={{ color: 'blue', fontSize: 13 }}>Name</Label>
+                        <Label style={{ color: '#056608', fontSize: 13 }}>Name</Label>
                         <Input />
                     </Item>
 
                     <Item stackedLabel>
-                        <Label style={{ color: 'blue', fontSize: 13 }}>Last Name</Label>
+                        <Label style={{ color: '#056608', fontSize: 13 }}>Last Name</Label>
                         <Input />
                     </Item>
 
-                    <Label style={{ color: 'blue', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Gender</Label>
+                    <Label style={{ color: '#056608', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Gender</Label>
 
 
                     <Item >
@@ -87,7 +87,7 @@ export default class Profile extends Component {
                         </Picker>
                     </Item>
 
-                    <Label style={{ color: 'blue', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Date if Birth</Label>
+                    <Label style={{ color: '#056608', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Date of Birth</Label>
                     <Item style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                         <Text>
                             {this.state.date.toString().substr(4, 12)}
@@ -103,23 +103,23 @@ export default class Profile extends Component {
                             />
                         )}
                         <View >
-                            <Button onPress={this.showDatepicker}>
+                            <Button onPress={this.showDatepicker} style={{ backgroundColor: '#81B29A' }}>
                                 <Icon type="Ionicons" name="calendar" />
                             </Button>
                         </View>
                     </Item>
 
                     <Item stackedLabel>
-                        <Label style={{ color: 'blue', fontSize: 13 }}>Weight</Label>
+                        <Label style={{ color: '#056608', fontSize: 13 }}>Weight</Label>
                         <Input />
                     </Item>
 
                     <Item stackedLabel>
-                        <Label style={{ color: 'blue', fontSize: 13 }}>Height</Label>
+                        <Label style={{ color: '#056608', fontSize: 13 }}>Height</Label>
                         <Input />
                     </Item>
 
-                    <Label style={{ color: 'blue', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Physical training</Label>
+                    <Label style={{ color: '#056608', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Physical training</Label>
                     <Item >
                         <Picker
                             mode="dropdown"
@@ -142,7 +142,7 @@ export default class Profile extends Component {
                     </Item>
 
                     <Item style={{ alignSelf: 'center' }}>
-                        <Button style={{ borderRadius: 25 }}>
+                        <Button style={{ borderRadius: 25, backgroundColor: '#81B29A' }}>
                             <Link to="/change-password">
                                 <Text >Change the Password</Text>
                             </Link>
@@ -150,7 +150,7 @@ export default class Profile extends Component {
                     </Item>
 
                 </Form>
-            </LinearGradient>
+            </ScrollView>
         );
     }
 

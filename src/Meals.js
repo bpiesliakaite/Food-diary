@@ -6,6 +6,8 @@ import Tooltip from 'react-native-walkthrough-tooltip';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteMeal, getFoodList, getMeals, setMealCreateForm } from './redux/store';
 import { useHistory } from 'react-router';
+import { color } from 'react-native-reanimated';
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function Meals() {
 
@@ -51,7 +53,8 @@ export default function Meals() {
     }
 
     return (
-        <Container>
+        <Container >
+
             <Modal visible={!!deleteMealModal}>
                 <View style={{ alignItems: 'center' }}>
                     <Text>Are you sure you want to delete this meal?</Text>
@@ -63,39 +66,37 @@ export default function Meals() {
                     </Button>
                 </View>
             </Modal>
-            <View style={{ alignItems: 'center' }}>
-                <Tooltip
-                    isVisible={isInfoTooltipVisible}
-                    content={<Text>Here You can create yYour favourite meals to make food journaling easier</Text>}
-                    placement="bottom"
-                    onClose={() => setInfoTootlipVisible(false)}
-                    topAdjustment={Platform.OS === 'android' ? -25 : 0}
-                >
-                    <Button transparent onPress={() => setInfoTootlipVisible(true)}>
-                        <Icon type="MaterialIcons" name="info-outline"></Icon>
-                    </Button>
-                </Tooltip>
 
+            <View style={{ alignItems: 'center', padding: 10, backgroundColor: '#81B29A' }}>
+                <Text style={{ fontWeight: 'bold' }}>THESE ARE YOUR FAVOURITE MEALS</Text>
+                <View style={{ alignItems: 'center', }}>
+                    <Tooltip
+                        isVisible={isInfoTooltipVisible}
+                        content={<Text>Here You can create Your favourite meals to make food journaling easier</Text>}
+                        placement="bottom"
+                        onClose={() => setInfoTootlipVisible(false)}
+                        topAdjustment={Platform.OS === 'android' ? -25 : 0}
+                    >
+                        <Button transparent onPress={() => setInfoTootlipVisible(true)}>
+                            <Icon type="MaterialIcons" name="info-outline"></Icon>
+                        </Button>
+                    </Tooltip>
+                </View >
             </View>
+
             <SwipeListView
-                style={{ padding: 40 }}
+                style={{ padding: 5 }}
                 data={meals}
                 renderItem={(data, rowMap) => (
-                    <View style={{ backgroundColor: 'white', paddingBottom: 30, borderColor: 'blue', borderBottomWidth: 0, borderTopWidth: 1 }}>
+                    <View style={{ backgroundColor: 'white', paddingBottom: 10, borderColor: '#2A9D8F', borderBottomWidth: 0, borderTopWidth: 1 }}>
                         <Text style={{ fontWeight: 'bold', textAlign: 'center' }}>{data.item.name}</Text>
                         <Text style={{ color: 'grey' }}>{data.item.info}</Text>
-                        <Button onPress={() => deleteMealAction(data.item)}>
-                            <Text>Delete</Text>
-                        </Button>
-                        <Button onPress={() => updateMealAction(data.item)}>
-                            <Text>Edit</Text>
-                        </Button>
                     </View>
                 )}
                 renderHiddenItem={(data, rowMap) => (
                     <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-                        <Text style={{ color: 'blue' }}>Edit</Text>
-                        <Text style={{ color: 'red' }}>Delete</Text>
+                        <Text style={{ color: 'blue' }} onPress={() => updateMealAction(data.item)}>Edit</Text>
+                        <Text style={{ color: 'red' }} onPress={() => deleteMealAction(data.item)}>Delete</Text>
                     </View>
                 )}
                 leftOpenValue={75}
@@ -106,11 +107,11 @@ export default function Meals() {
             <Fab
                 direction="up"
                 containerStyle={{}}
-                style={{ backgroundColor: '#5067FF' }}
+                style={{ backgroundColor: '#81B29A' }}
                 position="bottomRight"
                 onPress={openMealAddForm}
-            ><Icon type="Octicons" name="plus" /></Fab>
-        </Container>
+            ><Icon type="Octicons" name="plus" style={{ color: 'white' }} /></Fab>
+        </Container >
     );
 
 }
