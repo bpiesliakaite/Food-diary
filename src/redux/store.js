@@ -3,7 +3,7 @@ import * as SecureStore from 'expo-secure-store';
 import axios from 'axios';
 import cookieParser from 'set-cookie-parser';
 
-const baseUrl = 'http://192.168.43.233:5000';
+const baseUrl = 'http://192.168.43.178:5000';
 
 // Account
 export const accountRegister = createAsyncThunk(
@@ -104,6 +104,7 @@ const accountSlice = createSlice({
             state.registered = true;
         },
         [accountAuthorize.fulfilled]: (state, action) => {
+            console.log(action.payload);
             state.account = action.payload;
             state.loginError = null;
             state.registerError = null;

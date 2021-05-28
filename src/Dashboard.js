@@ -55,7 +55,7 @@ const FoodGroupIcons = Object.freeze({
 export default function Dashboard() {
     const foodList = useSelector(state => state.meals.foodList);
     const renderList = (mealType) => (
-        foodList && foodList[mealType] ? foodList[mealType].map((value, index) => (
+        foodList && foodList[mealType] && foodList[mealType].length ? foodList[mealType].map((value, index) => (
             value.meal || value.group ? <ListItem icon key={index}>
                 {value.meal && <>
                     <Left>
@@ -79,7 +79,7 @@ export default function Dashboard() {
                 </>}
 
             </ListItem> : null
-        )) : null);
+        )) : <Text>No food items added yet!</Text>);
 
     const dataArray = [
         { title: MealTypeEnum.Breakfast, content: renderList(MealTypeEnum.Breakfast) },
