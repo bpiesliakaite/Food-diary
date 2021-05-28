@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Header, View, Fab, Button, Icon, Text } from 'native-base';
 import FoodEntryForm from './FoodEntryForm';
-import { format, isToday, addDays } from 'date-fns';
+import { format, isToday, addDays, isSameDay } from 'date-fns';
 import { useSelector, useDispatch } from 'react-redux';
 import { MealTypeEnum, getFoodList, getMeals } from './redux/store';
-import { PieChart } from 'react-native-chart-kit';
+import { PieChart, ProgressChart } from 'react-native-chart-kit';
+import { Dimensions } from "react-native";
+const screenWidth = Dimensions.get("window").width;
 
 const FoodGroupEnum = Object.freeze({
     Vegetables: 'Vegetables',
@@ -40,15 +42,41 @@ const countFoodItemsForGroup = (foodList, foodGroup, meals) => {
 }
 
 const chartConfig = {
-  backgroundGradientFrom: "#1E2923",
-  backgroundGradientFromOpacity: 0,
-  backgroundGradientTo: "#08130D",
-  backgroundGradientToOpacity: 0.5,
-  color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
-  strokeWidth: 2, // optional, default 3
-  barPercentage: 0.5,
-  useShadowColorFromDataset: false // optional
+  
+    backgroundColor: '#1cc910',
+    backgroundGradientFrom: '#ffffff',
+    backgroundGradientTo: '#ffffff',
+    decimalPlaces: 2,
+    color: (opacity = 1) => `rgba(${ Math.round( opacity * 100)}, ${Math.round( opacity * 200)}, ${Math.round( opacity * 50)}, ${opacity})`,
+    style: {
+        borderRadius: 16,
+    },
+    strokeWidth: 2, // optional, default 3
+    barPercentage: 0.5,
+    useShadowColorFromDataset: false // optional
 };
+
+const theDayBeforeYesterday = {
+    labels: ["Vit C", "Sugar", "Vit B6"], // optional
+    data: [0.92, 0.84, 0.03]
+}
+
+const yesterday = {
+    label: ["Vit C", "Sugar", "Vit B6"],
+    data: [1, 0.21, 0.18],
+}
+
+const today = {
+  label: ["Vit C", "Sugar", "Vit B6"],
+  data: [0.08, 0.3, 0.42]
+}
+
+const longPast = {
+    label: ["Vit C", "Sugar", "Vit B6"],
+    data: [0, 0, 0]
+}
+
+const isDaysBefore = (date, days) => isSameDay(addDays(new Date(), -days), date);
 
 const Reports = () => {
     const [date, setDate] = useState(new Date());
@@ -135,9 +163,10 @@ const Reports = () => {
                     <Text>{'>'}</Text>
                 </Button>
             </View>
+            <Text style={{ textAlign: 'center', fontWeight: 'bold'}}>Daily food consumption by type</Text>
     <PieChart
   data={data}
-  width={400}
+  width={screenWidth}
   height={200}
   chartConfig={chartConfig}
   accessor={"count"}
@@ -146,6 +175,28 @@ const Reports = () => {
   center={[0, 0]}
   absolute
 />
+<Text style={{ textAlign: 'center', fontWeight: 'bold', marginTop: 50 }}>Vit C, Sugar and Vit B6 daily limits</Text>
+<ProgressChart
+  data={isDaysBefore(date, 0) ? today : isDaysBefore(date, 1) ? yesterday : isDaysBefore(date, 2) ? theDayBeforeYesterday : longPast}
+  width={screenWidth}
+  height={200}
+  strokeWidth={12}
+  radius={36}
+  chartConfig={chartConfig}
+  hideLegend={false}
+/>
+<View style={{ marginLeft: 75, width: 175 }}>
+    <Text style={{ fontWeight: 'bold' }}>Norms</Text>
+    <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
+        <Text>Vitamin C: </Text><Text style={{ width: 50 }}>90mg</Text>
+    </View>
+    <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
+        <Text>Sugar: </Text><Text style={{ width: 50 }}>24g</Text>
+    </View>
+    <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
+        <Text>Vitamin B6: </Text><Text style={{ width: 50 }}>2mg</Text>
+    </View>
+</View>
 </>
 )
 }

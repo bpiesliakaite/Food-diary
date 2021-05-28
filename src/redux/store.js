@@ -11,10 +11,14 @@ export const accountRegister = createAsyncThunk(
     async (userData, { dispatch }) => {
         try {
             const response = await axios.post(`${baseUrl}/auth/register`, userData);
+            return 'Account successfully created';
         } catch (error) {
+            if (error.response.status === 400) {
+                return 'User already exists';
+            }
             console.log(error);
+            return 'Something went wrong';
         }
-        return {};
     }
 )
 
@@ -25,7 +29,11 @@ export const accountLogin = createAsyncThunk(
             const response = await axios.post(`${baseUrl}/auth/login`, userData);
             await SecureStore.setItemAsync('accessToken', cookieParser.parse(response)[0].value);
             dispatch(accountAuthorize());
+            return null;
         } catch (error) {
+            if (error.response.status === 401) {
+                return 'Invalid credentials';
+            }
             console.log(error);
         }
     }
@@ -61,11 +69,30 @@ export const accountLogout = createAsyncThunk(
         }
     }
 )
+
+export const accountEdit = createAsyncThunk(
+    'accountEdit',
+    async (data) => {
+        try {
+            const accessToken = await SecureStore.getItemAsync('accessToken');
+            const response = await axios.post(`${baseUrl}/user/update`, data, {
+                headers: {
+                    Cookie: `accessToken=${accessToken}`,
+                }
+            });
+            return response.data;
+        } catch(error) {
+            console.log(error);
+        }
+    }
+)
 const accountSlice = createSlice({
     name: 'account',
     initialState: {
         account: undefined,
         registered: false,
+        loginError: null,
+        registerError: null,
     },
     reducers: {
         authAccount: (state, action) => {
@@ -78,6 +105,17 @@ const accountSlice = createSlice({
         },
         [accountAuthorize.fulfilled]: (state, action) => {
             state.account = action.payload;
+            state.loginError = null;
+            state.registerError = null;
+        },
+        [accountEdit.fulfilled]: (state, action) => {
+            state.account = action.payload;
+        },
+        [accountLogin.fulfilled]: (state, action) => {
+            state.loginError = action.payload;
+        },
+        [accountRegister.fulfilled]: (state, action) => {
+            state.registerError = action.payload;
         },
         [accountLogout.fulfilled]: (state, action) => {
             state.account = undefined;

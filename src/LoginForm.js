@@ -19,6 +19,7 @@ export default function LoginForm() {
   const dispatch = useDispatch();
   const history = useHistory();
   const [errors, setErrors] = useState({});
+  const loginError = useSelector(state => state.account.loginError);
 
   useEffect(() => {
     if (!!account) {
@@ -45,7 +46,6 @@ export default function LoginForm() {
       dispatch(accountLogin({ email, password }))
     }
   }
-  console.log(account);
 
   useEffect(() => {
     setErrors({});
@@ -80,6 +80,7 @@ export default function LoginForm() {
           />
           {errors.password ? <Text style={{ color: 'red', fontSize: 9 }}>{errors.password}</Text> : null}
         </View>
+        {loginError ? <Text style={{ color: 'red', fontSize: 9, paddingBottom: 20 }}>{loginError}</Text> : null}
 
         {/* <TouchableOpacity> */}
         <Link component={TouchableOpacity} style={styles.create_button} to="/create-account">

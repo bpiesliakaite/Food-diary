@@ -87,17 +87,18 @@ export default function Meals() {
                 style={{ padding: 5 }}
                 data={meals}
                 renderItem={(data, rowMap) => (
-                    <View style={{ backgroundColor: 'white', paddingBottom: 10, borderColor: '#2A9D8F', borderBottomWidth: 0, borderTopWidth: 1 }}>
+                    <View key={data.item.id.toString()} style={{ backgroundColor: 'white', paddingBottom: 10, borderColor: '#2A9D8F', borderBottomWidth: 0, borderTopWidth: 1 }}>
                         <Text style={{ fontWeight: 'bold', textAlign: 'center' }}>{data.item.name}</Text>
                         <Text style={{ color: 'grey' }}>{data.item.info}</Text>
                     </View>
                 )}
                 renderHiddenItem={(data, rowMap) => (
-                    <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <View key={data.item.id.toString()} style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                         <Text style={{ color: 'blue' }} onPress={() => updateMealAction(data.item)}>Edit</Text>
                         <Text style={{ color: 'red' }} onPress={() => deleteMealAction(data.item)}>Delete</Text>
                     </View>
                 )}
+                keyExtractor={item => item.id.toString()}
                 leftOpenValue={75}
                 rightOpenValue={-75}
 

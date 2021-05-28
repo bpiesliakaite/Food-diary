@@ -60,7 +60,7 @@ const MealForm = () => {
 
     const editFoodItem = (key, foodItem) => {
         setFootItemEditKey(key);
-        setFoodItemForm(foodItem);
+        setFoodItemForm({ ...foodItem, amount: foodItem.amount.toString() });
         setModal(true);
     }
 

@@ -12,6 +12,7 @@ export default function CreateAccountForm() {
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
   const [errors, setErrors] = useState({});
+  const registerError = useSelector(state => state.account.registerError);
   // const isOpen = useSelector(state => state.repeatPassword);
 
   const registered = useSelector(state => state.account.registered);
@@ -52,7 +53,6 @@ export default function CreateAccountForm() {
     }
   }
   errors.SuccessfullRegistration = 'Registration successfull! Please log in.';
-  console.log(registered);
 
   useEffect(() => {
     setErrors({});
@@ -102,7 +102,7 @@ export default function CreateAccountForm() {
         </View>
         {errors.passwordMatching ? <Text style={{ color: 'red', fontSize: 9, paddingBottom: 20 }}>{errors.passwordMatching}</Text> : null}
         {/* {errors.passwordLenght ? <Text style={{ color: 'red', fontSize: 9, paddingBottom: 20 }}>{errors.passwordLenght}</Text> : null} */}
-
+        {registerError ? <Text style={{ color: registerError === 'Account successfully created' ? 'green' : 'red', fontSize: 9, paddingBottom: 20 }}>{registerError}</Text> : null}
         <Link component={TouchableOpacity} style={styles.create_button} to="/login">
           <Text style={styles.create_button}>I already have an account</Text>
         </Link>
