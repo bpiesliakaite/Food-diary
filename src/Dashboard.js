@@ -70,14 +70,14 @@ export default function Dashboard() {
                 </>}
                 {!value.meal && <>
                     <Left>
-                    {FoodGroupIcons[value.group]}
+                        {FoodGroupIcons[value.group]}
                     </Left>
                     <Body><Text>{value.food}</Text></Body>
                     <Right>
                         <Text>{value.amount}{value.group === 'Alcohol' ? ' ml' : ' g'}</Text>
                     </Right>
                 </>}
-                
+
             </ListItem> : null
         )) : null);
 
@@ -155,15 +155,15 @@ export default function Dashboard() {
                 active={fabActive}
                 direction="up"
                 containerStyle={{}}
-                style={{ backgroundColor: '#056608' }}
+                style={{ backgroundColor: '#81B29A' }}
                 position="bottomRight"
                 onPress={() => setFabActive(!fabActive)}
             >
                 <Icon type="Octicons" name="plus" />
-                <Button style={{ backgroundColor: '#81B29A' }} onPress={onFoodEntryCreateClick}>
+                <Button style={{ backgroundColor: '#056608' }} onPress={onFoodEntryCreateClick}>
                     <Icon type="MaterialCommunityIcons" name="food-apple" />
                 </Button>
-                <Button style={{ backgroundColor: '#81B29A' }} onPress={onMealEntryCreateClick}>
+                <Button style={{ backgroundColor: '#056608' }} onPress={onMealEntryCreateClick}>
                     <Icon type="MaterialCommunityIcons" name="food" />
                 </Button>
             </Fab> : null}

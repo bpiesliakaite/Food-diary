@@ -1,5 +1,5 @@
 import React, { Component, useEffect, useState } from 'react';
-import { Container, Label, Item, Input, View, Text, Icon, Fab, Left, Body, Right, Subtitle, Title, Button } from 'native-base';
+import { Container, Label, Item, Input, View, Text, Icon, Fab, Form, Body, Right, Subtitle, Title, Button } from 'native-base';
 import { Modal, TouchableHighlight } from 'react-native';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import Tooltip from 'react-native-walkthrough-tooltip';
@@ -55,15 +55,14 @@ export default function Meals() {
     return (
         <Container >
 
-            <Modal visible={!!deleteMealModal}>
-                <View style={{ alignItems: 'center' }}>
-                    <Text>Are you sure you want to delete this meal?</Text>
-                    <Button onPress={() => submitDeleteMealAction()}>
-                        <Text>Delete</Text>
-                    </Button>
-                    <Button onPress={() => cancelDeleteMealAction()}>
-                        <Text>Cancel</Text>
-                    </Button>
+            <Modal visible={!!deleteMealModal} >
+                <View style={{ alignItems: 'center', paddingTop: 250 }}>
+                    <Text style={{ fontWeight: 'bold' }}>Are you sure you want to delete this meal?</Text>
+
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 30 }}>
+                        <Button onPress={() => cancelDeleteMealAction()} style={{ backgroundColor: '#81B29A' }}><Text>Cancel</Text></Button>
+                        <Button onPress={() => submitDeleteMealAction()} style={{ backgroundColor: '#056608' }}><Text>Delete</Text></Button>
+                    </View>
                 </View>
             </Modal>
 

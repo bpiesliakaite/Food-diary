@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Component } from 'react';
-import { Item, Icon, Picker, Form, Label, Input, Button, Text, View, DatePicker, Left, Textarea, Accordion } from 'native-base';
-import { Modal, Platform } from 'react-native';
+import { Item, Icon, Picker, Form, Label, Input, Button, Text, View, Left, Textarea, Accordion } from 'native-base';
+import { Modal, Platform, ScrollView } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Link, useHistory } from 'react-router-native';
 import { List } from 'native-base';
@@ -20,7 +20,6 @@ const FoodGroupEnum = Object.freeze({
     Dairy: 'Dairy',
     SweetsSugarsBeverages: 'Sweets, sugars, beverages',
     Alcohol: 'Alcohol',
-    Fat: 'Fat',
 });
 
 const MealForm = () => {
@@ -55,6 +54,7 @@ const MealForm = () => {
 
 
     const addFoodItem = () => {
+        setErrors({});
         setModal(true);
     }
 
@@ -75,23 +75,36 @@ const MealForm = () => {
     }
 
     const submitFoodItem = () => {
-        if (foodItemEditKey !== '') {
-            dispatch(setMealCreateForm({
-                ...mealFormState,
-                foodItems:
-                    mealFormState.foodItems.map((value, index) => index === foodItemEditKey ? foodItemForm : value),
-            }));
-        } else {
-            dispatch(setMealCreateForm({
-                ...mealFormState,
-                foodItems: [
-                    ...mealFormState.foodItems,
-                    foodItemForm
-                ]
-            }));
+        const amountNumber = parseFloat(foodItemForm.amount);
+        const errors = {}
+        let hasErrors = false;
+        if (!amountNumber) {
+            errors.amount = 'Required';
+            hasErrors = true;
         }
-        setFootItemEditKey('');
-        closeModalForm();
+        if (hasErrors) {
+            setErrors(errors);
+        } else
+
+            if (foodItemEditKey !== '') {
+                dispatch(setMealCreateForm({
+                    ...mealFormState,
+                    foodItems:
+                        mealFormState.foodItems.map((value, index) => index === foodItemEditKey ? foodItemForm : value),
+                }));
+            } else {
+                dispatch(setMealCreateForm({
+                    ...mealFormState,
+                    foodItems: [
+                        ...mealFormState.foodItems,
+                        foodItemForm
+                    ]
+                }));
+                closeModalForm();
+                setFootItemEditKey('');
+            }
+
+
     }
 
     const removeFoodItem = (key) => {
@@ -144,7 +157,7 @@ const MealForm = () => {
                 foodItems: []
             }));
         }
-        
+
         history.push('/meals');
     }
 
@@ -172,7 +185,7 @@ const MealForm = () => {
                         shadowRadius: 3.84,
                         elevation: 5,
                     }}>
-                        <Label style={{ color: 'blue', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Meal Type</Label>
+                        {/* <Label style={{ color: 'blue', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Meal Type</Label>
                         <Item >
                             <Picker
                                 mode="dropdown"
@@ -184,8 +197,8 @@ const MealForm = () => {
                             >
                                 {mealTypeOptions}
                             </Picker>
-                        </Item>
-                        <Label style={{ color: 'blue', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Food Group</Label>
+                        </Item> */}
+                        <Label style={{ color: '#056608', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Food Group</Label>
                         <Item>
                             <Picker
                                 mode="dropdown"
@@ -198,7 +211,7 @@ const MealForm = () => {
                                 {options}
                             </Picker>
                         </Item>
-                        <Label style={{ color: 'blue', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Food</Label>
+                        <Label style={{ color: '#056608', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Food</Label>
                         <Item>
                             <Picker
                                 mode="dropdown"
@@ -212,7 +225,7 @@ const MealForm = () => {
                             </Picker>
                         </Item>
 
-                        <Label style={{ color: 'blue', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Amount ({foodItemForm.foodGroup === FoodGroupEnum.Alcohol ? 'ml' : 'grams'})</Label>
+                        <Label style={{ color: '#056608', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Amount ({foodItemForm.foodGroup === FoodGroupEnum.Alcohol ? 'ml' : 'grams'})</Label>
 
                         <Item error={!!errors.amount}>
                             <Input keyboardType="numeric" value={foodItemForm.amount} onChangeText={(val) => setFoodItemForm(previousState => ({ ...previousState, amount: val }))} placeholder="Enter Amount" />
@@ -228,54 +241,55 @@ const MealForm = () => {
                 </View>
             </Modal>
 
-            <Item stackedLabel>
-                <Label style={{ color: 'blue', fontSize: 13 }}>Name</Label>
-                <Input
-                    value={mealFormState.name}
-                    onChangeText={onNameChange}
-                />
-            </Item>
+            <ScrollView style={{ marginTop: 20 }}>
+                <Item stackedLabel>
+                    <Label style={{ color: '#056608', fontSize: 13 }}>Name</Label>
+                    <Input
+                        value={mealFormState.name}
+                        onChangeText={onNameChange}
+                    />
+                </Item>
 
-            <Item stackedLabel>
-                <Label style={{ color: 'blue', fontSize: 13 }}>Info</Label>
-                <Textarea
-                    bordered
-                    value={mealFormState.info}
-                    onChangeText={onInfoChange}
-                    style={{ width: '100%', margin: 0, fontSize: 13 }}
-                />
-            </Item>
+                <Item stackedLabel>
+                    <Label style={{ color: '#056608', fontSize: 13 }}>Info</Label>
+                    <Textarea
+                        bordered
+                        value={mealFormState.info}
+                        onChangeText={onInfoChange}
+                        style={{ width: '100%', margin: 0, fontSize: 13 }}
+                    />
+                </Item>
 
-            <List>
-                <Label style={{ color: 'blue', fontSize: 13 }}>Consists of</Label>
-                {!mealFormState.foodItems.length && <Text>No items yet</Text>}
-                {mealFormState.foodItems.map((foodItem, indx) => {
-                    return (<ListItem icon key={indx}>
 
-                        <Body>
-                            <Text>{foodItem.foodOptionLabel} - ({foodItem.amount} {foodItem.foodGroup === FoodGroupEnum.Alcohol ? 'ml' : 'grams'})</Text>
-                        </Body>
-                        <Right>
-                            <Button transparent onPress={() => removeFoodItem(indx)}>
-                                <Text style={{ color: 'red' }}>Remove</Text>
-                            </Button>
-                            <Button transparent onPress={() => editFoodItem(indx, foodItem)}>
-                                <Text style={{ color: 'blue' }}>Edit</Text>
-                            </Button>
-                        </Right>
-                    </ListItem>);
-                })}
+                <List>
+                    <Label style={{ color: '#056608', fontSize: 13 }}>Consists of</Label>
+                    {!mealFormState.foodItems.length && <Text>No items yet</Text>}
+                    {mealFormState.foodItems.map((foodItem, indx) => {
+                        return (<ListItem icon key={indx}>
 
-            </List>
-            <Button onPress={() => addFoodItem()}>
-                <Text>
-                    Add Item
-                </Text>
-            </Button>
-            <Button onPress={() => onSubmit()}>
-                <Text>Save</Text>
-            </Button>
-        </Form>
+                            <Body>
+                                <Text style={{ fontSize: 12 }}>{foodItem.foodOptionLabel} - ({foodItem.amount} {foodItem.foodGroup === FoodGroupEnum.Alcohol ? 'ml' : 'g'})</Text>
+                            </Body>
+                            <Right>
+                                <Button transparent onPress={() => removeFoodItem(indx)}>
+                                    <Text style={{ color: 'red' }}>Remove</Text>
+                                </Button>
+                                <Button transparent onPress={() => editFoodItem(indx, foodItem)}>
+                                    <Text style={{ color: 'blue' }}>Edit</Text>
+                                </Button>
+                            </Right>
+                        </ListItem>);
+                    })}
+
+                </List>
+
+
+                <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 30 }}>
+                    <Button onPress={() => addFoodItem()} style={{ backgroundColor: '#81B29A' }}><Text>Add new item</Text></Button>
+                    <Button onPress={() => onSubmit()} style={{ backgroundColor: '#056608' }}><Text>Submit</Text></Button>
+                </View>
+            </ScrollView>
+        </Form >
     )
 }
 
