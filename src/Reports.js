@@ -24,7 +24,6 @@ const getMealFoodGroupAmount = (meal, meals, foodGroup) => {
     if(!mealObject) {
         return 0;
     }
-    console.log(mealObject);
     const foodItemsAmounts = mealObject.foodItems.filter(item => item.group === foodGroup).reduce((sum, value) => sum + value.amount, 0);
     return foodItemsAmounts;
 }

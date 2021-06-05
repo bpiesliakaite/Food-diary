@@ -60,7 +60,7 @@ export default function Meals() {
                     <Text style={{ fontWeight: 'bold' }}>Are you sure you want to delete this meal?</Text>
 
                     <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 30 }}>
-                        <Button onPress={() => cancelDeleteMealAction()} style={{ backgroundColor: '#81B29A' }}><Text>Cancel</Text></Button>
+                        <Button onPress={() => cancelDeleteMealAction()} style={{ backgroundColor: '#81B29A', marginRight: 24 }}><Text>Cancel</Text></Button>
                         <Button onPress={() => submitDeleteMealAction()} style={{ backgroundColor: '#056608' }}><Text>Delete</Text></Button>
                     </View>
                 </View>
@@ -88,14 +88,19 @@ export default function Meals() {
                 data={meals}
                 renderItem={(data, rowMap) => (
                     <View key={data.item.id.toString()} style={{ backgroundColor: 'white', paddingBottom: 10, borderColor: '#2A9D8F', borderBottomWidth: 0, borderTopWidth: 1 }}>
-                        <Text style={{ fontWeight: 'bold', textAlign: 'center' }}>{data.item.name}</Text>
+                        <Text style={{ fontWeight: 'bold', textAlign: 'center' }}>{data.item.name} ({data.item.foodItems.reduce((prev, curr) => prev + curr.foodComposition.KCALS, 0)} kcal)</Text>
                         <Text style={{ color: 'grey' }}>{data.item.info}</Text>
                     </View>
                 )}
                 renderHiddenItem={(data, rowMap) => (
-                    <View key={data.item.id.toString()} style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-                        <Text style={{ color: 'blue' }} onPress={() => updateMealAction(data.item)}>Edit</Text>
-                        <Text style={{ color: 'red' }} onPress={() => deleteMealAction(data.item)}>Delete</Text>
+                    <View key={data.item.id.toString()} style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', height: '100%' }}>
+                        <Button icon transparent style={{ width: 75, height: '100%', justifyContent: 'center', alignItems: 'center' }} onPress={() => updateMealAction(data.item)}>
+                            <Icon name='edit' type="MaterialIcons"/>
+                            {/* <Text>Edit</Text> */}
+                        </Button>
+                        <Button icon transparent style={{ color: 'red', width: 75, height: '100%', justifyContent: 'center', alignItems: 'center' }} onPress={() => deleteMealAction(data.item)}>
+                            <Icon name='delete' type="MaterialIcons" style={{color: 'red'}} />
+                        </Button>
                     </View>
                 )}
                 keyExtractor={item => item.id.toString()}
