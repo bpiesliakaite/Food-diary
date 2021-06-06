@@ -65,7 +65,7 @@ export default function Dashboard() {
                             <Icon active type="MaterialCommunityIcons" name="food" style={{ color: 'white' }} />
                         </Button>
                     </Left>
-                    <Body><Text>{value.meal.name}</Text></Body>
+                    <Body><Text>{value.meal.name} ({value.foodComposition.KCALS} kcal)</Text></Body>
                     <Right>
                         <Text>{value.amount} portions</Text>
                     </Right>
@@ -74,7 +74,7 @@ export default function Dashboard() {
                     <Left>
                         {FoodGroupIcons[value.group]}
                     </Left>
-                    <Body><Text>{value.food}</Text></Body>
+                    <Body><Text>{value.food}  ({value.foodComposition.KCALS} kcal)</Text></Body>
                     <Right>
                         <Text>{value.amount}{value.group === 'Alcohol' ? ' ml' : ' g'}</Text>
                     </Right>

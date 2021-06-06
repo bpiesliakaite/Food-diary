@@ -333,7 +333,8 @@ const mealsSlice = createSlice({
                     foodOption: foodItem.foodDataId,
                     foodOptionLabel: foodItem.foodData.food,
                     amount: foodItem.amount,
-                    group: foodItem.foodData.group
+                    group: foodItem.foodData.group,
+                    foodComposition: foodItem.foodComposition
                 }))
             }));
         },
