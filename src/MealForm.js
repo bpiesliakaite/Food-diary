@@ -92,6 +92,7 @@ const MealForm = () => {
                     foodItems:
                         mealFormState.foodItems.map((value, index) => index === foodItemEditKey ? foodItemForm : value),
                 }));
+                closeModalForm();
             } else {
                 dispatch(setMealCreateForm({
                     ...mealFormState,

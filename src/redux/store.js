@@ -104,7 +104,6 @@ const accountSlice = createSlice({
             state.registered = true;
         },
         [accountAuthorize.fulfilled]: (state, action) => {
-            console.log(action.payload);
             state.account = action.payload;
             state.loginError = null;
             state.registerError = null;
@@ -346,7 +345,8 @@ const mealsSlice = createSlice({
                         foodItems: action.payload.foodItems.map((foodItem) => ({
                             foodOption: foodItem.foodDataId,
                             foodOptionLabel: foodItem.foodData.food,
-                            amount: foodItem.amount
+                            amount: foodItem.amount,
+                            foodComposition: foodItem.foodComposition
                         }))
                     };
                 }

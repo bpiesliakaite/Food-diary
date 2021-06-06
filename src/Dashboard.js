@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Modal } from 'react-native';
 import { format, addDays, isToday } from 'date-fns';
-import { Accordion, View, Text, Icon, Fab, Button, ListItem, Left, Body, Right, List } from 'native-base';
+import { Accordion, View, Text, Icon, Fab, Button, ListItem, Left, Body, Right, List, Footer } from 'native-base';
 import { useDispatch, useSelector } from 'react-redux';
 import { getFoodList, openFoodEntryForm, MealTypeEnum, openMealEntryForm } from './redux/store';
 import FoodEntryForm from './FoodEntryForm';
@@ -142,6 +142,60 @@ export default function Dashboard() {
     const [fabActive, setFabActive] = useState(false);
     const [isInfoTooltipVisible, setInfoTootlipVisible] = useState(false);
 
+
+    const [nutritions, setNutritions] = useState({
+        KCALS: 0,
+        PROT: 0,
+        FAT: 0,
+        CHO: 0,
+        TOTSUG: 0,
+        VITC: 0,
+        VITB6: 0,
+        K: 0,
+        CA: 0,
+        MG: 0,
+        FE: 0
+    });
+
+    useEffect(() => {
+
+        const arrayFoodList = Object.values(foodList).reduce((reducedArray, currArray) => [
+            ...reducedArray,
+            ...currArray
+        ], []);
+
+        if (arrayFoodList.length > 0) {
+            let nutrits = {
+                KCALS: 0,
+                PROT: 0,
+                FAT: 0,
+                CHO: 0,
+                TOTSUG: 0,
+                VITC: 0,
+                VITB6: 0,
+                K: 0,
+                CA: 0,
+                MG: 0,
+                FE: 0
+            };
+            arrayFoodList.map((foodItem) => {                
+                nutrits.KCALS += foodItem.foodComposition.KCALS;
+                nutrits.PROT += foodItem.foodComposition.PROT;
+                nutrits.FAT += foodItem.foodComposition.FAT;
+                nutrits.CHO += foodItem.foodComposition.CHO;
+                nutrits.TOTSUG += foodItem.foodComposition.TOTSUG;
+                nutrits.VITC += foodItem.foodComposition.VITC;
+                nutrits.VITB6 += foodItem.foodComposition.VITB6;
+                nutrits.K += foodItem.foodComposition.K;
+                nutrits.CA += foodItem.foodComposition.CA;
+                nutrits.MG += foodItem.foodComposition.MG;
+                nutrits.FE += foodItem.foodComposition.FE;
+            })
+            setNutritions(nutrits);
+        }
+    }, [foodList]);
+    console.log(nutritions);
+
     return (
         <>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -153,7 +207,19 @@ export default function Dashboard() {
                     <Text>{'>'}</Text>
                 </Button>
             </View>
-            <Accordion dataArray={dataArray} expanded={[]} renderHeader={renderHeader} renderContent={renderContent} />
+            <Accordion style={{ height: '50%'}} dataArray={dataArray} expanded={[]} renderHeader={renderHeader} renderContent={renderContent} />
+            <View style={{ flexDirection: 'column', height: 100, width: '60%', backgroundColor: 'red' }}>
+                <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                    <Text>Nutritions</Text>
+                </View>
+                <View style={{ padding: 10 }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <Text>Calories</Text>
+                        <Text>100</Text>
+                    </View>
+                    <Text>Sugar</Text>
+                </View>
+            </View>
             {isToday(date) ? <Fab
                 active={fabActive}
                 direction="up"
