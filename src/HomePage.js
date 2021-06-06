@@ -29,11 +29,9 @@ export default function HomePage() {
 
     return (
         <Container style={styles.container}>
-            <LinearGradient colors={['#FFFCF7', '#E4F0D0', '#81B29A', '#2A9D8F']} style={styles.container}>
+            <LinearGradient colors={['#D0A38A', '#B5C99A']} style={styles.container}>
                 {/* <Image style={styles.image} source={require("../assets/food_icon.png")} /> */}
                 <StatusBar style="auto" />
-
-
 
                 <Image source={require("../assets/giphy.gif")} style={{ width: "60%", height: "30%" }} />
 
@@ -44,7 +42,6 @@ export default function HomePage() {
                 <Text style={{ textAlignVertical: "center", textAlign: "center", }} >
                     Monitor Your food easier
                 </Text>
-
 
                 <TouchableOpacity style={styles.createBtn} onPress={onBeginClick}>
                     <Text style={styles.loginText}>LET'S BEGIN!</Text>

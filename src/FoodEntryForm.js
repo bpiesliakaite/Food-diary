@@ -118,7 +118,7 @@ const FoodEntryForm = () => {
                     shadowRadius: 3.84,
                     elevation: 5,
                 }}>
-                    <Label style={{ color: '#056608', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Meal Type</Label>
+                    <Label style={{ color: '#97A97C', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Meal Type</Label>
                     <Item >
                         <Picker
                             mode="dropdown"
@@ -131,7 +131,7 @@ const FoodEntryForm = () => {
                             {mealTypeOptions}
                         </Picker>
                     </Item>
-                    <Label style={{ color: '#056608', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Food Group</Label>
+                    <Label style={{ color: '#97A97C', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Food Group</Label>
                     <Item>
                         <Picker
                             mode="dropdown"
@@ -144,7 +144,7 @@ const FoodEntryForm = () => {
                             {options}
                         </Picker>
                     </Item>
-                    <Label style={{ color: '#056608', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Food</Label>
+                    <Label style={{ color: '#97A97C', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Food</Label>
                     <Item>
                         <Picker
                             mode="dropdown"
@@ -157,14 +157,14 @@ const FoodEntryForm = () => {
                             {foodOptionItems}
                         </Picker>
                     </Item>
-                    <Label style={{ color: '#056608', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Amount ({foodGroup === FoodGroupEnum.Alcohol ? 'ml' : 'g'})</Label>
+                    <Label style={{ color: '#97A97C', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Amount ({foodGroup === FoodGroupEnum.Alcohol ? 'ml' : 'g'})</Label>
                     <Item error={!!errors.amount}>
                         <Input keyboardType="numeric" value={amount} onChangeText={(text) => setAmount(text)} placeholder="Enter Amount" />
                     </Item>
                     {errors.amount ? <Text style={{ marginLeft: 15, color: 'red', fontSize: 9 }}>{errors.amount}</Text> : null}
                     <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 30 }}>
-                        <Button onPress={onFormDismiss} style={{ backgroundColor: '#81B29A' }}><Text>Cancel</Text></Button>
-                        <Button onPress={onSubmit} style={{ backgroundColor: '#056608' }}><Text>Add Item</Text></Button>
+                        <Button onPress={onFormDismiss} style={{ backgroundColor: '#DDBEA9' }}><Text>Cancel</Text></Button>
+                        <Button onPress={onSubmit} style={{ backgroundColor: '#97A97C' }}><Text>Add Item</Text></Button>
                     </View>
                 </Form>
             </View>

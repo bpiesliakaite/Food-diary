@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getFoodList, openFoodEntryForm, MealTypeEnum, openMealEntryForm } from './redux/store';
 import FoodEntryForm from './FoodEntryForm';
 import MealEntryForm from './MealEntryForm';
+import Tooltip from 'react-native-walkthrough-tooltip';
+
 
 
 const FoodGroupIcons = Object.freeze({
@@ -101,7 +103,7 @@ export default function Dashboard() {
                 padding: 10,
                 justifyContent: "space-between",
                 alignItems: "center",
-                backgroundColor: "#81B29A"
+                backgroundColor: "#EDDCD2"
             }} >
                 <Text style={{ fontWeight: "600" }}>
                     {" "}{item.title}
@@ -138,6 +140,7 @@ export default function Dashboard() {
     }
 
     const [fabActive, setFabActive] = useState(false);
+    const [isInfoTooltipVisible, setInfoTootlipVisible] = useState(false);
 
     return (
         <>
@@ -155,15 +158,15 @@ export default function Dashboard() {
                 active={fabActive}
                 direction="up"
                 containerStyle={{}}
-                style={{ backgroundColor: '#81B29A' }}
+                style={{ backgroundColor: '#b5c99a' }}
                 position="bottomRight"
                 onPress={() => setFabActive(!fabActive)}
             >
                 <Icon type="Octicons" name="plus" />
-                <Button style={{ backgroundColor: '#056608' }} onPress={onFoodEntryCreateClick}>
+                <Button style={{ backgroundColor: '#DDBEA9' }} onPress={onFoodEntryCreateClick}>
                     <Icon type="MaterialCommunityIcons" name="food-apple" />
                 </Button>
-                <Button style={{ backgroundColor: '#056608' }} onPress={onMealEntryCreateClick}>
+                <Button style={{ backgroundColor: '#DDBEA9' }} onPress={onMealEntryCreateClick}>
                     <Icon type="MaterialCommunityIcons" name="food" />
                 </Button>
             </Fab> : null}

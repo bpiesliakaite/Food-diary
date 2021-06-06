@@ -87,7 +87,7 @@ const MealEntryForm = () => {
                     shadowRadius: 3.84,
                     elevation: 5,
                 }}>
-                    <Label style={{ color: '#056608', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Meal Type</Label>
+                    <Label style={{ color: '#97A97C', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Meal Type</Label>
                     <Item >
                         <Picker
                             mode="dropdown"
@@ -100,7 +100,7 @@ const MealEntryForm = () => {
                             {mealTypeOptions}
                         </Picker>
                     </Item>
-                    <Label style={{ color: '#056608', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Meal</Label>
+                    <Label style={{ color: '#97A97C', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Meal</Label>
                     <Item >
                         <Picker
                             mode="dropdown"
@@ -113,7 +113,7 @@ const MealEntryForm = () => {
                         </Picker>
                     </Item>
                     {!!mealForm.meal && <>
-                        <Label style={{ color: '#056608', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Portions</Label>
+                        <Label style={{ color: '#97A97C', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Portions</Label>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                             <Button transparent style={{ margin: 15, borderColor: 'black', paddingRight: 60 }} onPress={() => changePortion(-1)}>
                                 <Icon type="MaterialIcons" name="arrow-left" style={{ color: 'black' }} />
@@ -127,8 +127,8 @@ const MealEntryForm = () => {
                     }
 
                     <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 30 }} >
-                        <Button onPress={onFormDismiss} style={{ backgroundColor: '#81B29A' }}><Text>Cancel</Text></Button>
-                        <Button onPress={onSubmit} style={{ backgroundColor: '#056608' }}><Text>Add Item</Text></Button>
+                        <Button onPress={onFormDismiss} style={{ backgroundColor: '#DDBEA9' }}><Text>Cancel</Text></Button>
+                        <Button onPress={onSubmit} style={{ backgroundColor: '#97A97C' }}><Text>Add Item</Text></Button>
                     </View>
 
                 </Form>

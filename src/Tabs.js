@@ -20,8 +20,8 @@ const AppTabs = () => {
 
     return (
         <Footer >
-            <FooterTab style={{ backgroundColor: "#056608" }}>
-                <Button vertical active={location.pathname === '/dashboard'} onPress={() => openRoute('/dashboard')} >
+            <FooterTab style={{ backgroundColor: "#EDDCD2", }}>
+                <Button vertical active={location.pathname === '/dashboard'} onPress={() => openRoute('/dashboard')}  >
                     <Icon type="Ionicons" name="book" style={{ color: 'white' }} />
                     <Text>Diary</Text>
                 </Button>

@@ -185,20 +185,7 @@ const MealForm = () => {
                         shadowRadius: 3.84,
                         elevation: 5,
                     }}>
-                        {/* <Label style={{ color: 'blue', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Meal Type</Label>
-                        <Item >
-                            <Picker
-                                mode="dropdown"
-                                iosHeader="Select Meal Type"
-                                iosIcon={<Icon name="arrow-down" />}
-                                selectedValue={foodItemForm.mealType}
-                                onValueChange={(val) => setFoodItemForm(previousState => ({ ...previousState, mealType: val }))}
-                                style={{ flex: 1, height: 40 }}
-                            >
-                                {mealTypeOptions}
-                            </Picker>
-                        </Item> */}
-                        <Label style={{ color: '#056608', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Food Group</Label>
+                        <Label style={{ color: '#97A97C', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Food Group</Label>
                         <Item>
                             <Picker
                                 mode="dropdown"
@@ -211,7 +198,7 @@ const MealForm = () => {
                                 {options}
                             </Picker>
                         </Item>
-                        <Label style={{ color: '#056608', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Food</Label>
+                        <Label style={{ color: '#97A97C', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Food</Label>
                         <Item>
                             <Picker
                                 mode="dropdown"
@@ -225,7 +212,7 @@ const MealForm = () => {
                             </Picker>
                         </Item>
 
-                        <Label style={{ color: '#056608', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Amount ({foodItemForm.foodGroup === FoodGroupEnum.Alcohol ? 'ml' : 'grams'})</Label>
+                        <Label style={{ color: '#97A97C', paddingLeft: 15, fontSize: 13, marginTop: 10 }}>Amount ({foodItemForm.foodGroup === FoodGroupEnum.Alcohol ? 'ml' : 'grams'})</Label>
 
                         <Item error={!!errors.amount}>
                             <Input keyboardType="numeric" value={foodItemForm.amount} onChangeText={(val) => setFoodItemForm(previousState => ({ ...previousState, amount: val }))} placeholder="Enter Amount" />
@@ -234,8 +221,9 @@ const MealForm = () => {
                         {errors.amount ? <Text style={{ marginLeft: 15, color: 'red', fontSize: 9 }}>{errors.amount}</Text> : null}
 
                         <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 30 }}>
-                            <Button onPress={submitFoodItem}><Text>Add Item</Text></Button>
-                            <Button onPress={closeModalForm}><Text>Cancel</Text></Button>
+
+                            <Button onPress={closeModalForm} style={{ backgroundColor: '#DDBEA9' }}><Text>Cancel</Text></Button>
+                            <Button onPress={submitFoodItem} style={{ backgroundColor: '#97A97C' }}><Text>Add Item</Text></Button>
                         </View>
                     </Form>
                 </View>
@@ -243,7 +231,7 @@ const MealForm = () => {
 
             <ScrollView style={{ marginTop: 20 }}>
                 <Item stackedLabel>
-                    <Label style={{ color: '#056608', fontSize: 13 }}>Name</Label>
+                    <Label style={{ color: '#97A97C', fontSize: 13 }}>Name</Label>
                     <Input
                         value={mealFormState.name}
                         onChangeText={onNameChange}
@@ -251,7 +239,7 @@ const MealForm = () => {
                 </Item>
 
                 <Item stackedLabel>
-                    <Label style={{ color: '#056608', fontSize: 13 }}>Info</Label>
+                    <Label style={{ color: '#97A97C', fontSize: 13 }}>Info</Label>
                     <Textarea
                         bordered
                         value={mealFormState.info}
@@ -262,7 +250,7 @@ const MealForm = () => {
 
 
                 <List>
-                    <Label style={{ color: '#056608', fontSize: 13 }}>Consists of</Label>
+                    <Label style={{ color: '#97A97C', fontSize: 13 }}>Consists of</Label>
                     {!mealFormState.foodItems.length && <Text>No items yet</Text>}
                     {mealFormState.foodItems.map((foodItem, indx) => {
                         return (<ListItem icon key={indx}>
@@ -272,10 +260,10 @@ const MealForm = () => {
                             </Body>
                             <Right>
                                 <Button transparent onPress={() => removeFoodItem(indx)}>
-                                    <Text style={{ color: 'red' }}>Remove</Text>
+                                    <Text style={{ color: '#BF805F' }}>Remove</Text>
                                 </Button>
                                 <Button transparent onPress={() => editFoodItem(indx, foodItem)}>
-                                    <Text style={{ color: 'blue' }}>Edit</Text>
+                                    <Text style={{ color: '#97A97C' }}>Edit</Text>
                                 </Button>
                             </Right>
                         </ListItem>);
@@ -285,8 +273,8 @@ const MealForm = () => {
 
 
                 <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 30 }}>
-                    <Button onPress={() => addFoodItem()} style={{ backgroundColor: '#81B29A' }}><Text>Add new item</Text></Button>
-                    <Button onPress={() => onSubmit()} style={{ backgroundColor: '#056608' }}><Text>Submit</Text></Button>
+                    <Button onPress={() => addFoodItem()} style={{ backgroundColor: '#97A97C' }}><Text>Add new item</Text></Button>
+                    <Button onPress={() => onSubmit()} style={{ backgroundColor: '#97A97C' }}><Text>Submit</Text></Button>
                 </View>
             </ScrollView>
         </Form >

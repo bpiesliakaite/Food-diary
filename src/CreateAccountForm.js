@@ -61,7 +61,7 @@ export default function CreateAccountForm() {
   return (
     //<Modal visible={isOpen} onDismiss={onFormDismiss} transparent>
     <View style={styles.container}>
-      <LinearGradient colors={['#FFFCF7', '#E4F0D0', '#81B29A', '#2A9D8F']} style={styles.container}>
+      <LinearGradient colors={['#D0A38A', '#B5C99A']} style={styles.container}>
         <Text>{registered}</Text>
         <Image style={styles.image} source={require("../assets/food_icon.png")} />
         <StatusBar style="auto" />
