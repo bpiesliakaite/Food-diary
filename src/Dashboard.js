@@ -194,7 +194,6 @@ export default function Dashboard() {
             setNutritions(nutrits);
         }
     }, [foodList]);
-    console.log(nutritions);
 
     return (
         <>
@@ -208,16 +207,13 @@ export default function Dashboard() {
                 </Button>
             </View>
             <Accordion style={{ height: '50%'}} dataArray={dataArray} expanded={[]} renderHeader={renderHeader} renderContent={renderContent} />
-            <View style={{ flexDirection: 'column', height: 100, width: '60%', backgroundColor: 'red' }}>
+            <View style={{ flexDirection: 'column', height: 70, width: '60%' }}>
                 <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                     <Text>Nutritions</Text>
                 </View>
-                <View style={{ padding: 10 }}>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                        <Text>Calories</Text>
-                        <Text>100</Text>
-                    </View>
-                    <Text>Sugar</Text>
+                <View style={{ padding: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <Text>Calories</Text>
+                    <Text>{nutritions.KCALS.toFixed(2)} kcal</Text>
                 </View>
             </View>
             {isToday(date) ? <Fab

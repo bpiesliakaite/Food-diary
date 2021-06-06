@@ -94,6 +94,55 @@ const Reports = () => {
     const foodList = useSelector(state => state.meals.foodList);
     const meals = useSelector(state => state.meals.meals);
 
+    const [nutritions, setNutritions] = useState({
+        KCALS: 0,
+        PROT: 0,
+        FAT: 0,
+        CHO: 0,
+        TOTSUG: 0,
+        VITC: 0,
+        VITB6: 0,
+        K: 0,
+        CA: 0,
+        MG: 0,
+        FE: 0
+    });
+
+    useEffect(() => {
+        const arrayFoodList = Object.values(foodList).reduce((reducedArray, currArray) => [
+            ...reducedArray,
+            ...currArray
+        ], []);
+
+        let nutrits = {
+            KCALS: 0,
+            PROT: 0,
+            FAT: 0,
+            CHO: 0,
+            TOTSUG: 0,
+            VITC: 0,
+            VITB6: 0,
+            K: 0,
+            CA: 0,
+            MG: 0,
+            FE: 0
+        };
+        arrayFoodList.map((foodItem) => {                
+            nutrits.KCALS += foodItem.foodComposition.KCALS;
+            nutrits.PROT += foodItem.foodComposition.PROT;
+            nutrits.FAT += foodItem.foodComposition.FAT;
+            nutrits.CHO += foodItem.foodComposition.CHO;
+            nutrits.TOTSUG += foodItem.foodComposition.TOTSUG;
+            nutrits.VITC += foodItem.foodComposition.VITC;
+            nutrits.VITB6 += foodItem.foodComposition.VITB6;
+            nutrits.K += foodItem.foodComposition.K;
+            nutrits.CA += foodItem.foodComposition.CA;
+            nutrits.MG += foodItem.foodComposition.MG;
+            nutrits.FE += foodItem.foodComposition.FE;
+        })
+        setNutritions(nutrits);
+    }, [foodList]);
+
     const data = [
         {
             name: `g ${FoodGroupEnum.Vegetables}`,
@@ -174,26 +223,52 @@ const Reports = () => {
   center={[0, 0]}
   absolute
 />
-<Text style={{ textAlign: 'center', fontWeight: 'bold', marginTop: 50 }}>Vit C, Sugar and Vit B6 daily limits</Text>
-<ProgressChart
-  data={isDaysBefore(date, 0) ? today : isDaysBefore(date, 1) ? yesterday : isDaysBefore(date, 2) ? theDayBeforeYesterday : longPast}
-  width={screenWidth}
-  height={200}
-  strokeWidth={12}
-  radius={36}
-  chartConfig={chartConfig}
-  hideLegend={false}
-/>
-<View style={{ marginLeft: 75, width: 175 }}>
-    <Text style={{ fontWeight: 'bold' }}>Norms</Text>
+<Text style={{ textAlign: 'center', fontWeight: 'bold', marginTop: 50 }}>Total Nutritions</Text>
+
+<View style={{ padding: 20}}>
+    {/* KCALS: 0,
+        PROT: 0,
+        FAT: 0,
+        CHO: 0,
+        TOTSUG: 0,
+        VITC: 0,
+        VITB6: 0,
+        K: 0,
+        CA: 0,
+        MG: 0,
+        FE: 0 */}
     <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
-        <Text>Vitamin C: </Text><Text style={{ width: 50 }}>90mg</Text>
+        <Text>Calories: </Text><Text>{nutritions.KCALS.toFixed(2)} kcal</Text>
     </View>
     <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
-        <Text>Sugar: </Text><Text style={{ width: 50 }}>24g</Text>
+        <Text>Proteins: </Text><Text>{nutritions.PROT.toFixed(2)} g</Text>
     </View>
     <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
-        <Text>Vitamin B6: </Text><Text style={{ width: 50 }}>2mg</Text>
+        <Text>Fat: </Text><Text>{nutritions.FAT.toFixed(2)} kcal</Text>
+    </View>
+    <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
+        <Text>Cholesterol: </Text><Text>{nutritions.CHO.toFixed(2)} g</Text>
+    </View>
+    <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
+        <Text>Sugar: </Text><Text>{nutritions.TOTSUG.toFixed(2)} g</Text>
+    </View>
+    <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
+        <Text>Vitamin C: </Text><Text>{nutritions.VITC.toFixed(2)} mg</Text>
+    </View>
+    <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
+        <Text>Vitamin B6: </Text><Text>{nutritions.VITB6.toFixed(2)} mg</Text>
+    </View>
+    <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
+        <Text>Potassium: </Text><Text>{nutritions.K.toFixed(2)} mg</Text>
+    </View>
+    <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
+        <Text>Calcium: </Text><Text>{nutritions.CA.toFixed(2)} mg</Text>
+    </View>
+    <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
+        <Text>Magnesium: </Text><Text>{nutritions.MG.toFixed(2)} mg</Text>
+    </View>
+    <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
+        <Text>Iron: </Text><Text>{nutritions.FE.toFixed(2)} mg</Text>
     </View>
 </View>
 </>
