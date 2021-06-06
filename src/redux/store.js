@@ -379,6 +379,7 @@ const mealsSlice = createSlice({
             state.mealSelectOptions = action.payload;
         },
         [getFoodList.fulfilled]: (state, action) => {
+            console.log(action.payload);
             state.foodList = action.payload;
         },
         [getMeals.fulfilled]: (state, action) => {

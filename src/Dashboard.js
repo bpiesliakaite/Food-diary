@@ -65,7 +65,7 @@ export default function Dashboard() {
                             <Icon active type="MaterialCommunityIcons" name="food" style={{ color: 'white' }} />
                         </Button>
                     </Left>
-                    <Body><Text>{value.meal.name} ({value.foodComposition.KCALS} kcal)</Text></Body>
+                    <Body><Text>{value.meal.name} ({value.foodComposition.KCALS.toFixed(0)} kcal)</Text></Body>
                     <Right>
                         <Text>{value.amount} portions</Text>
                     </Right>
@@ -74,7 +74,7 @@ export default function Dashboard() {
                     <Left>
                         {FoodGroupIcons[value.group]}
                     </Left>
-                    <Body><Text>{value.food}  ({value.foodComposition.KCALS} kcal)</Text></Body>
+                    <Body><Text>{value.food}  ({value.foodComposition.KCALS.toFixed(0)} kcal)</Text></Body>
                     <Right>
                         <Text>{value.amount}{value.group === 'Alcohol' ? ' ml' : ' g'}</Text>
                     </Right>
@@ -163,36 +163,33 @@ export default function Dashboard() {
             ...reducedArray,
             ...currArray
         ], []);
-
-        if (arrayFoodList.length > 0) {
-            let nutrits = {
-                KCALS: 0,
-                PROT: 0,
-                FAT: 0,
-                CHO: 0,
-                TOTSUG: 0,
-                VITC: 0,
-                VITB6: 0,
-                K: 0,
-                CA: 0,
-                MG: 0,
-                FE: 0
-            };
-            arrayFoodList.map((foodItem) => {                
-                nutrits.KCALS += foodItem.foodComposition.KCALS;
-                nutrits.PROT += foodItem.foodComposition.PROT;
-                nutrits.FAT += foodItem.foodComposition.FAT;
-                nutrits.CHO += foodItem.foodComposition.CHO;
-                nutrits.TOTSUG += foodItem.foodComposition.TOTSUG;
-                nutrits.VITC += foodItem.foodComposition.VITC;
-                nutrits.VITB6 += foodItem.foodComposition.VITB6;
-                nutrits.K += foodItem.foodComposition.K;
-                nutrits.CA += foodItem.foodComposition.CA;
-                nutrits.MG += foodItem.foodComposition.MG;
-                nutrits.FE += foodItem.foodComposition.FE;
-            })
-            setNutritions(nutrits);
-        }
+        let nutrits = {
+            KCALS: 0,
+            PROT: 0,
+            FAT: 0,
+            CHO: 0,
+            TOTSUG: 0,
+            VITC: 0,
+            VITB6: 0,
+            K: 0,
+            CA: 0,
+            MG: 0,
+            FE: 0
+        };
+        arrayFoodList.map((foodItem) => {
+            nutrits.KCALS += foodItem.foodComposition.KCALS;
+            nutrits.PROT += foodItem.foodComposition.PROT;
+            nutrits.FAT += foodItem.foodComposition.FAT;
+            nutrits.CHO += foodItem.foodComposition.CHO;
+            nutrits.TOTSUG += foodItem.foodComposition.TOTSUG;
+            nutrits.VITC += foodItem.foodComposition.VITC;
+            nutrits.VITB6 += foodItem.foodComposition.VITB6;
+            nutrits.K += foodItem.foodComposition.K;
+            nutrits.CA += foodItem.foodComposition.CA;
+            nutrits.MG += foodItem.foodComposition.MG;
+            nutrits.FE += foodItem.foodComposition.FE;
+        })
+        setNutritions(nutrits);
     }, [foodList]);
 
     return (
@@ -206,14 +203,10 @@ export default function Dashboard() {
                     <Text>{'>'}</Text>
                 </Button>
             </View>
-            <Accordion style={{ height: '50%'}} dataArray={dataArray} expanded={[]} renderHeader={renderHeader} renderContent={renderContent} />
-            <View style={{ flexDirection: 'column', height: 70, width: '60%' }}>
+            <Accordion style={{ height: '50%' }} dataArray={dataArray} expanded={[]} renderHeader={renderHeader} renderContent={renderContent} />
+            <View style={{ flexDirection: 'column', height: 70, width: '70%' }}>
                 <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                    <Text>Nutritions</Text>
-                </View>
-                <View style={{ padding: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <Text>Calories</Text>
-                    <Text>{nutritions.KCALS.toFixed(2)} kcal</Text>
+                    <Text style={{ color: '#97A97C', fontSize: 20 }}>Currently consumed calories: {nutritions.KCALS.toFixed(0)} kcal</Text>
                 </View>
             </View>
             {isToday(date) ? <Fab

@@ -70,7 +70,7 @@ export default function Meals() {
                     data={meals}
                     renderItem={(data, rowMap) => (
                         <View key={data.item.id.toString()} style={{ backgroundColor: '#EDDCD2', paddingBottom: 10, borderColor: '#2A9D8F', borderBottomWidth: 0, borderTopWidth: 1 }}>
-                            <Text style={{ fontWeight: 'bold', textAlign: 'center' }}>{data.item.name} ({data.item.foodItems.reduce((prev, curr) => prev + curr.foodComposition.KCALS, 0)} kcal)</Text>
+                            <Text style={{ fontWeight: 'bold', textAlign: 'center' }}>{data.item.name} ({data.item.foodItems.reduce((prev, curr) => prev + curr.foodComposition.KCALS, 0).toFixed(0)} kcal)</Text>
                             <Text style={{ color: 'grey' }}>{data.item.info}</Text>
                         </View>
                     )}
