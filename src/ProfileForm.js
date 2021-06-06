@@ -3,11 +3,12 @@ import { Platform, Modal } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { Container, Header, Content, Switch, Input, Icon, Label, Picker, Button, Text, Form, View, Item, DatePicker, Left } from "native-base";
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { accountEdit, openPasswordChangeForm } from './redux/store';
+import { accountEdit, openPasswordChangeForm, setPasswordChangeModalOpen } from './redux/store';
 import Tooltip from 'react-native-walkthrough-tooltip';
 import { ScrollView } from "react-native-gesture-handler";
 import { useHistory, useLocation } from 'react-router';
 import ChangePasswordForm from './ChangePasswordForm';
+import ChangePassword from "./ChangePasswordForm";
 
 export default function Profile() {
 
@@ -104,6 +105,10 @@ export default function Profile() {
         setShowDatePicker(true);
     }
 
+    const onPasswordChangePress = () => {
+        dispatch(setPasswordChangeModalOpen(true));
+    };
+
 
 
     return (
@@ -195,12 +200,13 @@ export default function Profile() {
 
                 <Item style={{ alignSelf: 'center' }}>
                     <Button transparent light onPress={onProfileSave} >
-                        <Text style={{ color: '#BF805F' }} onPress={onProfileSave}>Change the Password</Text>
+                        <Text style={{ color: '#BF805F' }} onPress={onPasswordChangePress}>Change the Password</Text>
                     </Button>
                 </Item>
 
 
             </Form>
+            <ChangePassword />
 
 
         </ScrollView>

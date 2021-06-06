@@ -86,6 +86,30 @@ export const accountEdit = createAsyncThunk(
         }
     }
 )
+
+export const accountChangePassword = createAsyncThunk(
+    'accountChangePassword',
+    async (data, { dispatch }) => {
+        try {
+            const accessToken = await SecureStore.getItemAsync('accessToken');
+            const response = await axios.post(`${baseUrl}/user/change-password`, data, {
+                headers: {
+                    Cookie: `accessToken=${accessToken}`,
+                }
+            });
+            dispatch(setPasswordChangeModalOpen(false));
+            dispatch(setPasswordChangeForm({
+                currentPassword: '',
+                newPassword: '',
+                repeatNewPassword: '',
+            }));
+            return '';
+        } catch (erro) {
+            return 'Invalid password';
+        }
+    }
+)
+
 const accountSlice = createSlice({
     name: 'account',
     initialState: {
@@ -93,10 +117,36 @@ const accountSlice = createSlice({
         registered: false,
         loginError: null,
         registerError: null,
+        passwordChangeModalOpen: false,
+        passwordChangeForm: {
+            currentPassword: '',
+            newPassword: '',
+            repeatNewPassword: '',
+        },
+        passwordChangeErrors: {
+            currentPassword: '',
+            newPassword: '',
+            repeatNewPassword: '',
+        },
     },
     reducers: {
         authAccount: (state, action) => {
             state.account = action.payload;
+        },
+        setPasswordChangeModalOpen: (state, action) => {
+            state.passwordChangeModalOpen = action.payload;
+        },
+        setPasswordChangeForm: (state, action) => {
+            state.passwordChangeForm = {
+                ...state.passwordChangeForm,
+                ...action.payload
+            };
+        },
+        setPasswordChangeErrors: (state, action) => {
+            state.passwordChangeErrors = {
+                ...state.passwordChangeErrors,
+                ...action.payload
+            };
         }
     },
     extraReducers: {
@@ -114,6 +164,12 @@ const accountSlice = createSlice({
         [accountLogin.fulfilled]: (state, action) => {
             state.loginError = action.payload;
         },
+        [accountChangePassword.fulfilled]: (state, action) => {
+            state.passwordChangeErrors = {
+                ...state.passwordChangeErrors,
+                currentPassword: action.payload
+            };
+        },
         [accountRegister.fulfilled]: (state, action) => {
             state.registerError = action.payload;
         },
@@ -123,7 +179,7 @@ const accountSlice = createSlice({
     }
 })
 
-export const { authAccount } = accountSlice.actions;
+export const { authAccount, setPasswordChangeModalOpen, setPasswordChangeErrors, setPasswordChangeForm } = accountSlice.actions;
 
 
 // Meals
